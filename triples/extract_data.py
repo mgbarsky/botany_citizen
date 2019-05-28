@@ -41,12 +41,30 @@ def filter_dict(plant_dict, cutoff=5):
     return new_dict
 
 
+# Filter out plants which aren't angiosperms
+def filter_angiosperms(plant_dict, input_name):
+    # Read angiosperms into a set
+    angiosperms = set()
+    input_f = open(input_name)
+    for line in input_f:
+        angiosperms.add(line.rstrip())
+    input_f.close()
+
+    # Filter
+    new_dict = {}
+    for plant in plant_dict:
+        if plant in angiosperms:
+            new_dict[plant] = plant_dict[plant]
+    return new_dict
+
+
 if __name__ == "__main__":
     p_dict = get_dict(["../flower_data/6390.txt", "../flower_data/6403.txt", "../flower_data/6404.txt"])
-    f_dict = filter_dict(p_dict)
-    frequencies = utils.get_frequencies(f_dict)
+    p_dict = filter_dict(p_dict)
+    p_dict = filter_angiosperms(p_dict, "output/angiosperms/angiosperms.txt")
+    frequencies = utils.get_frequencies(p_dict)
 
     # Output to files
-    output.output_plants("output/plants.txt", f_dict)
-    output.output_attributes("output/attributes.txt", f_dict)
-    output.output_frequencies("output/frequencies.txt", frequencies)
+    output.output_plants("output/angiosperms/plants.txt", p_dict)
+    output.output_attributes("output/angiosperms/attributes.txt", p_dict)
+    output.output_frequencies("output/angiosperms/frequencies.txt", frequencies)
