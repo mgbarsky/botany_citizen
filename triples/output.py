@@ -26,8 +26,8 @@ def output_plants(path, plant_dict):
 def output_attributes(path, plant_dict):
     output_f = open(path, "w", encoding="latin1")
     for plant in plant_dict:
-        output_f.write("{} has the following features:\n".format(plant))
+        output_f.write("{}\n".format(plant))
         for tup in plant_dict[plant]:
-            output_f.write("{}: {}\n".format(tup[0], tup[1]))
+            output_f.write("{}\t{}\n".format(tup[0], tup[1]))
         output_f.write('\n')
     output_f.close()
