@@ -3,17 +3,17 @@ from selenium import webdriver
 import selenium.common.exceptions
 from bs4 import BeautifulSoup as Soup
 import time
+import urllib.request
+import os
 
 # Use long link to skip pop-up box
-LINK = "https://gobotany.nativeplanttrust.org/full/non-monocots/alternate-remaining-non-\
-monocots/#_filters=family,genus,habitat_general,habitat,state_distribution,leaf_type_general\
-_rn,petal_color_rn,leaf_arrangement_general_rn,leaf_blade_margin_general_rn,flower_symmetry\
-_rn,perianth_number_rn,perianth_fusion_rn,stamen_number_rn,fruit_type_general_rn,fruit_length\
-_rn&_view=photos&_show=flowers"
+LINK = "https://gobotany.nativeplanttrust.org/full/non-monocots/alternate-remaining-non-monocots/#_filters=family,genus,habitat_general,habitat,state_distribution,leaf_type_general_rn,petal_color_rn,leaf_arrangement_general_rn,leaf_blade_margin_general_rn,flower_symmetry_rn,perianth_number_rn,perianth_fusion_rn,stamen_number_rn,fruit_type_general_rn,fruit_length_rn,bulbils_rn,flowers_replaced_by_bulblets_rn,perianth_color_rn,petals_fringed_on_margin_rn,inflorescence_type_rn,flower_description_rn,fruit_wing_rn,calyx_symmetry_rn,plant_habit_rn,plant_life_form_rn&_view=photos&_show=flowers"
 CHECK_FREQUENCY = 0.25  # Number of seconds between scanning the page for new elements
 TARGET_ATTRIBUTES = ["Leaf type", "Flower petal color", "Leaf arrangement", "Leaf blade edges",
                      "Flower symmetry", "Number of sepals, petals or tepals", "Fusion of sepals and petals",
-                     "Stamen number", "Fruit type (general)"]
+                     "Stamen number", "Fruit type (general)", "Bulbils", "Petal and sepal colors", "Fringed petal edges",
+                     "Inflorescence type", "Flower description", "Wings on fruit", "Calyx symmetry", "Growth form",
+                     "Parasitism", "Spines on plant"]
 TARGET_VALUES = {"Leaf type": ["compound", "simple"],
                  "Flower petal color": ["blue to purple", "green to brown", "orange", "other",
                                         "pink to red", "white", "yellow"],
@@ -23,7 +23,20 @@ TARGET_VALUES = {"Leaf type": ["compound", "simple"],
                  "Number of sepals, petals or tepals": ['1', '2', '3', '4', '5', '0', '6', '7'],
                  "Fusion of sepals and petals": ["unfused", "fused"],
                  "Stamen number": ['0', '1', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13'],
-                 "Fruit type (general)": ["dry & splits open", "dry & doesn't split open", "fleshy"]}
+                 "Fruit type (general)": ["dry & splits open", "dry & doesn't split open", "fleshy"],
+                 "Bulbils": ["no bulbils", "with bulbils"],
+                 "Petal and sepal colors": ["blue to purple", "green to brown", "orange", "other",
+                                           "pink to red", "white", "yellow"],
+                 "Fringed petal edges": ["fringed", "not fringed"],
+                 "Inflorescence type": ["one flower", "branched umbel", "corymb", "raceme"],
+                 "Flower description": ["superior ovary & hypanthium", "superior ovary", "inferior ovary"],
+                 "Wings on fruit": ["no wings", "with wings"],
+                 "Calyx symmetry": ["radially symmetrical", "bilaterally symmetrical"],
+                 "Growth form": ["subshrub", "vine", "herb"],
+                 "Parasitism": ["insectivorous", "parasite of fungi", "not parasitic", "parasitic on other plants"],
+                 "Spines on plant": ["no spines", "with spines"]
+                 }
+
 plant_data = {}
 
 
@@ -66,6 +79,13 @@ def double_click(browser, name, find_element):
             attempts += 1
 
 
+# Save the image locally
+def save_value_img(attribute_dir, drawing_src, local_path):
+    if not os.path.exists(attribute_dir):
+        os.mkdir(attribute_dir)
+    urllib.request.urlretrieve(drawing_src, local_path)
+
+
 # Use an attribute for a plant
 def use_attribute(browser, attribute):
     value_index = 0
@@ -73,10 +93,17 @@ def use_attribute(browser, attribute):
     while value_index < len(TARGET_VALUES[attribute]) + 1:
         find_attribute(browser, attribute)
         choices = browser.find_elements_by_class_name("choice")
-
         # Iterate over the radio buttons again
         i = 0
         for choice in choices:
+            # find the non-empty image corresponding to the choice
+            drawing_src = ""  # the str for storing img link
+            try:
+                if "transparent" not in (choice.find_element_by_tag_name("img").get_attribute("src")):
+                    drawing_src = choice.find_element_by_tag_name("img").get_attribute("src")
+            except:
+                pass
+
             try:
                 label = choice.find_element_by_class_name("choice-label")
             except selenium.common.exceptions.StaleElementReferenceException:
@@ -100,6 +127,11 @@ def use_attribute(browser, attribute):
 
             # If at the right attribute
             if i == value_index:
+                # Save the image locally
+                if drawing_src != "":
+                    attribute_dir = '../go_botany_img/' + attribute
+                    save_value_img(attribute_dir, drawing_src, attribute_dir + '/' + TARGET_VALUES[attribute][i] + '.gif')
+
                 # Click radio button, then submit button
                 double_click(browser, "input", choice.find_element_by_tag_name)
                 double_click(browser, "apply-btn", browser.find_element_by_class_name)
@@ -110,7 +142,6 @@ def use_attribute(browser, attribute):
                         plant_data[plant][attribute].append(TARGET_VALUES[attribute][i])
                     else:
                         plant_data[plant][attribute] = [TARGET_VALUES[attribute][i]]
-
                 break
 
             i += 1
