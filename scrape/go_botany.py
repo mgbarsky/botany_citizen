@@ -1,5 +1,6 @@
 # Scrape go-botany using a chrome instance
 from selenium import webdriver
+import selenium.common.exceptions
 from bs4 import BeautifulSoup as Soup
 import time
 
@@ -49,6 +50,22 @@ def get_full_plants(browser):
     return get_plant_set(plant_object)
 
 
+# Click a button
+def click_element(browser, element):
+        browser.execute_script("arguments[0].click();", element)
+
+
+def double_click(browser, name, find_element):
+    attempts = 0
+    while attempts < 5:
+        try:
+            click_element(browser, find_element(name))
+            break
+        except selenium.common.exceptions.StaleElementReferenceException:
+            time.sleep(0.2)
+            attempts += 1
+
+
 # Use an attribute for a plant
 def use_attribute(browser, attribute):
     value_index = 0
@@ -60,22 +77,32 @@ def use_attribute(browser, attribute):
         # Iterate over the radio buttons again
         i = 0
         for choice in choices:
-            label = choice.find_element_by_class_name("choice-label")
-            value = label.get_attribute("innerHTML")
+            try:
+                label = choice.find_element_by_class_name("choice-label")
+            except selenium.common.exceptions.StaleElementReferenceException:
+                use_attribute(browser, attribute)
+                return
+
+            try:
+                value = label.get_attribute("innerHTML")
+            except selenium.common.exceptions.StaleElementReferenceException:
+                use_attribute(browser, attribute)
+                return
+
             if value == "don't know" and value_index != len(TARGET_VALUES[attribute]) or "doesn't apply" in value:
                 continue
 
             # If done with all actual attributes, reset the browser state
             if value == "don't know":
-                choice.find_element_by_tag_name("input").click()
-                browser.find_element_by_class_name("apply-btn").click()
+                double_click(browser, "input", choice.find_element_by_tag_name)
+                double_click(browser, "apply-btn", browser.find_element_by_class_name)
                 break
 
             # If at the right attribute
             if i == value_index:
                 # Click radio button, then submit button
-                choice.find_element_by_tag_name("input").click()
-                browser.find_element_by_class_name("apply-btn").click()
+                double_click(browser, "input", choice.find_element_by_tag_name)
+                double_click(browser, "apply-btn", browser.find_element_by_class_name)
 
                 plant_set = get_full_plants(browser)
                 for plant in plant_set:  # Add (feature, value) to plant
@@ -105,8 +132,7 @@ def find_attribute(browser, attribute):
         html = question.find_element_by_class_name("name").get_attribute("innerHTML")
         name = Soup(html, "html.parser").text
         if name[:-1] == attribute:
-            button = question.find_element_by_tag_name("a")
-            button.click()
+            double_click(browser, "a", question.find_element_by_tag_name)
 
 
 def begin_scrape():
