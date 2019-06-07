@@ -49,7 +49,7 @@ def build_tree(vec, dummy_x, dummy_y):
     # print("clf: " + str(clf))
 
     # Visualize model
-    # To convert .dot to visualized pdf, using then command: dot -Tpdf plant_dtree.dot -o plant_dtree.pdf
+    # To convert .dot to visualized pdf, using the command: dot -Tpdf plant_dtree.dot -o plant_dtree.pdf
     with open("plant_dtree.dot", 'w') as f:
         tree.export_graphviz(clf, feature_names=vec.get_feature_names(), out_file=f)
     return clf
