@@ -1,6 +1,7 @@
+from math import log
 MISSINGCHAR = '?'
-STOPPING_INDEX = 19
-NUMERICAL = [5, 7]
+STOPPING_INDEX = 7  # 7 or 19 the species name: stop splitting
+NUMERICAL = [2, 4]  # 2,4 or 5,7
 NUMBER_RANGE = []
 
 class decisionnode:
@@ -42,7 +43,7 @@ def divideset(rows,column,value):
    return (set1,set2)
 
 # Create counts of possible results (the last column of
-# each row is the result)
+# each row is the result, from order to species)
 def uniquecounts(rows,scorevar):
    results={}
    for row in rows:
@@ -50,7 +51,8 @@ def uniquecounts(rows,scorevar):
       r=row[scorevar]
       if r not in results: results[r]=0
       results[r]+=1
-   return results
+   print(results)
+   return results  # An array of count of last unique col
 
 # Entropy is the sum of p(x)log(p(x)) across all
 # the different possible results
@@ -72,60 +74,7 @@ def variance(rows):
   variance=sum([(d-mean)**2 for d in data])/len(data)
   return variance
 
-def buildtree(rows,scorevar,prohibited=[],scoref=entropy):
-  if len(rows)==0: return decisionnode(  )
-  current_score=scoref(rows,scorevar)
 
-  # Set up some variables to track the best criteria
-  best_gain=0
-  best_criteria=None
-  best_sets=None
-
-  column_count=len(rows[0])-3
-  for col in range(0, column_count):
-    if col in prohibited_traits:
-       continue
-
-    # Generate the list of different values in
-    # this column
-    column_values={}
-    for row in rows:
-       column_values[row[col]]=1
-    # Now try dividing the rows up for each value
-    # in this column
-    valueCount = 0
-    for value in column_values.keys(  ):
-      if value == MISSINGCHAR or value == "FALSE":
-          continue
-      if col == 0 or col == 5 or col == 17:
-          if col == 0:
-              inc = 5
-          elif col == 5:
-              inc = 5
-          elif col == 17:
-              inc = 0.5
-          value = valueCount*inc
-
-      (set1,set2)=divideset(rows,col,value)
-
-      valueCount += 1
-
-      # Information gain
-      p=float(len(set1))/len(rows)
-      gain=current_score-p*scoref(set1,scorevar)-(1-p)*scoref(set2,scorevar)
-
-      if gain>best_gain and len(set1)>0 and len(set2)>0:
-        best_gain=gain
-        best_criteria=(col,value)
-        best_sets=(set1,set2)
-  # Create the subbranches
-  if best_gain>0:
-    trueBranch = buildtree(best_sets[0], scorevar, prohibited)
-    falseBranch = buildtree(best_sets[1], scorevar, prohibited)
-    return decisionnode(col=best_criteria[0],value=best_criteria[1],
-                        tb=trueBranch,fb=falseBranch)
-  else:
-    return decisionnode(results=uniquecounts(rows,scorevar))
 
 def prune(tree,mingain):
   # If the branches aren't leaves, then prune them
@@ -180,50 +129,52 @@ def classify(observation,tree):
 # Entropy is the sum of p(x)log(p(x)) across all
 # the different possible results
 def entropy1(rows,class_column):
-   from math import log
    log2=lambda x:log(x)/log(2)
    results=uniquecounts(rows,class_column)
    # Now calculate the entropy
    ent=0.0
    for r in results.keys(  ):
-      p=float(results[r])/len(rows)
+      p=float(results[r])/len(rows)  # probability at the level
       ent=ent-p*log2(p)
 
    return ent
 
+
 # Divides a set on a specific column. Can handle numeric
 # or nominal values
-
-def buildtree1(rows,scorevar,prohibited=[],scoref=entropy1,min_gain=0):
+def buildtree1(rows, scorevar, max_depth, prohibited=[],
+               scoref=entropy1, min_gain=0):
+  log2 = lambda x: log(x) / log(2)
   if len(rows)==0: return decisionnode(  )
   current_score=scoref(rows,scorevar)
-
 
   # Set up some variables to track the best criteria
   best_gain=0
   best_criteria=None
   best_column=None
 
-  column_count= STOPPING_INDEX
-  for col in range(0, column_count):
+  column_count = STOPPING_INDEX
 
-    if col in prohibited:
+  for col in range(0, column_count):
+    if col in prohibited:  # skip the prohibited attributes
         continue
     # Generate the list of different values in
     # this column
     column_values={}
+    # normal categorical attributes
     if col not in NUMERICAL + NUMBER_RANGE:
-        for row in rows:
-            if row[col] == MISSINGCHAR:
+        for row in rows:  # iterate over each row
+            if row[col] == MISSINGCHAR:  # skip "?"
                 continue
 
-            new_list = (str(row[col])).split(" or ")
+            new_list = (str(row[col])).split(" or ")  # split by "or" in case there are multiple possible values
             for feature in list(new_list):
                 newStr = feature
-                column_values[newStr]=[]
-
+                column_values[newStr]=[]  # assign categorical values as keys
+    #  Handle numerical attributes
     if col in NUMERICAL:
-        column_values = divideset1(rows, col, scorevar)
+        # Divide the numerical attribute
+        column_values = divideset1(rows, col, scorevar)  # pass all rows, current col_num, and total col_num
 
         if column_values is None:
             continue
@@ -234,8 +185,10 @@ def buildtree1(rows,scorevar,prohibited=[],scoref=entropy1,min_gain=0):
 
             my_tuple = (col, my_key)
 
-        if my_tuple in prohibited:
+        if my_tuple[0] in prohibited:
             column_values = None
+
+    # Not used for this year (for attributes upper and lower bounds)
     elif col in NUMBER_RANGE:
         column_values = divideset_interval(rows, col, scorevar)
 
@@ -256,33 +209,38 @@ def buildtree1(rows,scorevar,prohibited=[],scoref=entropy1,min_gain=0):
             if row[col] == MISSINGCHAR:
                 for value in column_values.keys():
                     column_values[value].append(row)
+
             elif " or " in str(row[col]):
                 new_list = (str(row[col])).split(" or ")
                 for feature in list(new_list):
                     newStr = feature
                     column_values[newStr].append(row)
+
             else:
-                column_values[row[col]].append(row)
+                 column_values[row[col]].append(row)
 
     if column_values is None or len(column_values.keys()) < 2:
         continue
 
     gain = current_score
-    # Information gain
+    intrinsic_info = 0
+    # Gain ratio
     for key, val_rows in column_values.items():
-        if col in NUMERICAL and key == "Less than":
-            continue
-        if col in NUMBER_RANGE and key == "Not inside":
-            continue
-
         p = float(len(val_rows) / len(rows))
         gain -= p * scoref(val_rows, scorevar)
+
+        intrinsic_info -= p*log2(p)
+    try:
+        gain = gain/intrinsic_info
+    except:
+        pass
 
     if gain > best_gain:
         best_gain = gain
         best_criteria = (col, column_values.keys())
-        best_column = column_values
+        best_column = column_values  # choose the best col with most gain ratio
 
+    # not allow split numerical attr multiple times (prohibited)
     if best_criteria is not None and (best_criteria[0] in NUMERICAL + NUMBER_RANGE):
         for key in best_criteria[1]:
             if key != "Less than" and key != "Not inside":
@@ -291,73 +249,94 @@ def buildtree1(rows,scorevar,prohibited=[],scoref=entropy1,min_gain=0):
         prohibited.append((best_criteria[0], my_key))
 
   # Create the subbranches
-  if best_gain>min_gain:
+  if best_gain > min_gain:
     children = {}
     for key, val_rows in best_column.items():
-        children[key] = buildtree1(val_rows, scorevar, prohibited, min_gain=min_gain)
-
+        # Build the tree recursively
+        children[key] = buildtree1(val_rows, scorevar, current_depth + 1, max_depth, prohibited, min_gain=min_gain)
     return decisionnode1(col=best_criteria[0],value=best_criteria[1],
-        children=children,fname=best_criteria[0])
-  elif scorevar > STOPPING_INDEX:
-      new_tree = buildtree1(rows, scorevar - 1, prohibited, min_gain=min_gain)
+        children=children,fname=best_criteria[0])  # return the tree with all its children
 
+  # When there are still plant hierarchy col
+  elif scorevar > STOPPING_INDEX:
+      new_tree = buildtree1(rows, scorevar - 1, current_depth, max_depth, prohibited, min_gain=min_gain)
       results_cat = uniquecounts(rows, scorevar).copy()
       if new_tree.results != None:
-        results_cat.update(new_tree.results)
-
+        results_cat.update(new_tree.results)  # update the current unique counts of current col
       return decisionnode1(col=new_tree.col, value=new_tree.value,
                            children=new_tree.children,results=results_cat,fname=new_tree.fname)
+
   else:
     return decisionnode1(results=uniquecounts(rows,scorevar))
+
 
 # Divides a set on a specific column. Handles numeric
 # values
 def divideset1(rows, column, scorevar, scoref=entropy1):
+    log2 = lambda x: log(x) / log(2)
     best_column_values = None
     best_gain = None
 
-    for row in rows:
+    for row in rows:  # iterate over each row of table (used as a benchmark to try diff splits)
         column_values = {}
 
+        # Assign row_val a numerical value
         row_val = None
         if isinstance(row[column], int):
             row_val = row[column]
         else:
-            row_val = int(row[column].split(" or ")[0])
-
+            row_val = int(row[column].split(" or ")[0])  # choose the smallest numerical value in row_val
+        # Use the value as key of the dic
         column_values[str(row_val)] = []
         column_values["Less than"] = []
 
         # Divide the rows into two sets
-        for row2 in rows:
+        for row2 in rows:  # iterate over all row2 for each iteration of row in rows
+          # Get a list of rows with numerical values in a col
           row2s = []
           if isinstance(row2[column], int):
             row2s.append(row2)
           elif " or " in row2[column]:
             arr = row2[column].split(" or ")
-            dup = list(row2)
+            dup = list(row2)  # dup = the duplicate of the current row
+
             for v in arr:
+                # seems changing dup at current numerical col to the last num (the largest )in arr;
                 dup[column] = int(v)
+            # append the revised dup row to row2s with largest possible numerical value in the row of current col
             row2s.append(dup)
 
+            # Iterate over each row in row2s
             for r in row2s:
                 if r[column] >= row_val:
+                    # Append the rows with larger value at current col (in the dic)
                     column_values[str(row_val)].append(r)
                 else:
+                    # Append the rows with smaller value at current col (in the dic)
                     column_values["Less than"].append(r)
           else:
             print(row2[column])
 
         local_gain = 0
-
-        # Information gain
+        intrinsic_info = 0
+        # Gain ratio
         for key, val_rows in column_values.items():
             p = float(len(val_rows) / len(rows))
             local_gain -= p * scoref(val_rows, scorevar)
 
+            try:
+                intrinsic_info -= p * log2(p)
+            except:
+                pass
+
+        try:
+            local_gain = local_gain / intrinsic_info
+        except:
+            pass
+
         if best_gain is None or local_gain > best_gain:
             key = str(row_val)
-            best_column_values = column_values.copy()
+            best_column_values = column_values.copy()  # choose divided set with most gain ratio
 
     if best_column_values is None:
         return None
@@ -395,6 +374,7 @@ def get_intervals(rows, column):
 
 # Divides a set on two column with intervals
 def divideset_interval(rows, column, scorevar, scoref=entropy1):
+    log2 = lambda x: log(x) / log(2)
     interval_list = get_intervals(rows, column)
     best_column_values = None
     best_gain = None
@@ -425,12 +405,20 @@ def divideset_interval(rows, column, scorevar, scoref=entropy1):
                 column_values[range_key].append(row)
 
         local_gain = 0
-
-        # Information gain
+        intrinsic_info = 0
+        first_check = True
+        # Gain ratio
         for key, val_rows in column_values.items():
             p = float(len(val_rows) / len(rows))
+            if first_check:
+                intrinsic_info = (-p * log2(p))
+                first_check = False
+            intrinsic_info -= p * log2(p)
             local_gain -= p * scoref(val_rows, scorevar)
-
+            try:
+                local_gain = local_gain / intrinsic_info
+            except:
+                pass
         if best_gain is None or local_gain > best_gain:
             best_key = range_key
             best_column_values = column_values.copy()

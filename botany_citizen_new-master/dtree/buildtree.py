@@ -74,60 +74,7 @@ def variance(rows):
   variance=sum([(d-mean)**2 for d in data])/len(data)
   return variance
 
-def buildtree(rows,scorevar,prohibited=[],scoref=entropy):
-  if len(rows)==0: return decisionnode(  )  # if no rows in table, stops
-  current_score=scoref(rows,scorevar)  # scorevar = num of col -1
 
-  # Set up some variables to track the best criteria
-  best_gain=0
-  best_criteria=None
-  best_sets=None
-
-  column_count=len(rows[0])-3
-  for col in range(0, column_count):
-    if col in prohibited_traits:
-       continue
-
-    # Generate the list of different values in
-    # this column
-    column_values={}
-    for row in rows:
-       column_values[row[col]]=1
-    # Now try dividing the rows up for each value
-    # in this column
-    valueCount = 0
-    for value in column_values.keys(  ):
-      if value == MISSINGCHAR or value == "FALSE":
-          continue
-      if col == 0 or col == 5 or col == 17:
-          if col == 0:
-              inc = 5
-          elif col == 5:
-              inc = 5
-          elif col == 17:
-              inc = 0.5
-          value = valueCount*inc
-
-      (set1,set2)=divideset(rows,col,value)
-
-      valueCount += 1
-
-      # Information gain
-      p=float(len(set1))/len(rows)
-      gain=current_score-p*scoref(set1,scorevar)-(1-p)*scoref(set2,scorevar)
-
-      if gain>best_gain and len(set1)>0 and len(set2)>0:
-        best_gain=gain
-        best_criteria=(col,value)
-        best_sets=(set1,set2)
-  # Create the subbranches
-  if best_gain>0:
-    trueBranch = buildtree(best_sets[0], scorevar, prohibited)
-    falseBranch = buildtree(best_sets[1], scorevar, prohibited)
-    return decisionnode(col=best_criteria[0],value=best_criteria[1],
-                        tb=trueBranch,fb=falseBranch)
-  else:
-    return decisionnode(results=uniquecounts(rows,scorevar))
 
 def prune(tree,mingain):
   # If the branches aren't leaves, then prune them
@@ -195,10 +142,12 @@ def entropy1(rows,class_column):
 
 # Divides a set on a specific column. Can handle numeric
 # or nominal values
-def buildtree1(rows,scorevar,current_depth,max_depth,prohibited=[],scoref=entropy1,min_gain=0):
+def buildtree1(rows, scorevar, max_depth, prohibited=[],
+               scoref=entropy1, min_gain=0):
   log2 = lambda x: log(x) / log(2)
   if len(rows)==0: return decisionnode(  )
   current_score=scoref(rows,scorevar)
+
   # Set up some variables to track the best criteria
   best_gain=0
   best_criteria=None
