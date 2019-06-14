@@ -70,7 +70,7 @@ def build_tree(answer_to_parent, rows, class_label_col, scoref=entropy, total_sc
     decision_node.results = rows
     decision_node.answer_to_parent = answer_to_parent
     if len(rows)==0: return decision_node #tbd
-    current_score=total_score_func(rows,class_label_col)
+    current_score=total_score_func({"1":rows},class_label_col)
     parent_score = current_score
     if current_score == 0:
         return decision_node #tbd
