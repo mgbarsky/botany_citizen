@@ -2,7 +2,7 @@ from decision_tree import *
 import json
 import itertools
 
-NUM_COLS = 0  # 11 or 23
+NUM_COLS = 11  # Number of columns in the dataset
 
 
 def read_data(filename):
