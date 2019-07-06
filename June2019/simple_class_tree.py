@@ -3,7 +3,7 @@ import json
 import itertools
 
 NUM_COLS = 11  # Number of columns in the dataset
-
+CONFIG_FILE = "config.txt"
 
 def read_data(filename):
     global NUM_COLS
@@ -42,69 +42,18 @@ def read_data(filename):
     return rows, feature_dict
 
 
-def ask_level_input(flower_table):
-    hierarchy_num = len(flower_table[0][1])
-    hierarchy_index_arr = []
-    for index in range(1, hierarchy_num + 1):
-        hierarchy_index_arr.append(str(index))
+def get_config_property(key):
+    f = open(CONFIG_FILE)
+    for line in f:
+        line = line.strip()
+        a = line.split('=')
+        if a[0] == key:
+            f.close()
+            return a[1]
 
-    while True:
-        label_col_index = input("Please enter the level of hierarchy used to build the tree, from 1 to "
-                                + str(hierarchy_num) + " inclusive: ")
-
-        if label_col_index in hierarchy_index_arr:
-            print("You are all set 😀 ! Please wait patiently until the program finishes (maybe, it never will)")
-            return int(label_col_index)-1
-
-        print("Oops, only integers between 1 and " + str(hierarchy_num) + " inclusive are allowed !")
-
-
-def flatten_alt_values(rows):  # deliminator is used for splitting multiple values at a col
-    """The function takes all rows (with repeated values in certain cols) in a table
-    and output new_rows with only one value at each col"""
-
-    new_rows = []  # new_rows with each row having one value at a col
-
-    r = 0
-    for row in rows:
-        r += 1
-        try:
-            data_cols = []
-            perm_input = []
-
-            has_alt = False
-            for col_id in range(len(row[0])):
-                if ' or ' in str(row[0][col_id]):
-                    has_alt = True
-                    v = row[0][col_id]
-                    alt_values = v.split(' or ')
-                    for k in range(len(alt_values)):
-                        try:
-                            alt_values[k] = int(alt_values[k])
-                        except:
-                            pass
-                    perm_input.append(alt_values)
-                    data_cols.append(col_id)
-
-            if has_alt:
-                # using itertools.product()
-                # to compute all possible permutations
-                permuted = list(itertools.product(*perm_input))
-
-                labels = row[1]
-                for new_vals in permuted:
-                    new_row_data = row[0][:]
-                    for i in range(len(new_vals)):
-                        new_row_data[data_cols[i]] = new_vals[i]
-
-                    new_row = [new_row_data] + [labels[:]]
-                    new_rows.append(new_row)
-            else:
-                new_rows.append(row[:])
-        except MemoryError:
-            print("Too many permutations for Row", r)
-
-    return new_rows
+    f.close()
+    print("No value for key", key)
+    return None
 
 
 # Find number of labels on leaves and branch depths, which are put into leaf_label_count_arr, depth_arr respectively
@@ -136,8 +85,12 @@ if __name__ == "__main__":
     print("Reading in file...")
     # flower_table: list of list of feature rows, flower_features: list of attributes
     flower_table, flower_features = read_data("d_flower_data_full.tsv")
-    label_col_index = ask_level_input(flower_table)  # return the level index number
-
+    label_col_index = get_config_property("class_column")  # return the level index number
+    try:
+        label_col_index = int(label_col_index)
+    except:
+        print("Invalid value for key", "'class_column'")
+        exit(1)
     # delimited_flower_table = flatten_alt_values(flower_table)
     print("{} observations, {} features".format(len(flower_table), NUM_COLS))
 

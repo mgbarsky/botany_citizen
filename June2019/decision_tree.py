@@ -9,6 +9,7 @@ class DecisionNode:
     self.answer_to_parent = answer_to_parent
     self.children = children  # list of decision nodes
     self.results = results  # list of final class labels - in case it is a leaf node
+    self.class_id = 0
 
 
 # Create counts of possible class labels in the same group of rows
@@ -25,7 +26,7 @@ def uniquecounts(rows, class_col_id):
 # Entropy is the sum of p(x)log(p(x)) across all
 # the different labels for the records in the same group
 def entropy(rows, class_column):
-    log2 = lambda x:log(x)/log(2)
+    log2 = lambda x: 0 if x == 0 else log(x)/log(2)
     results=uniquecounts(rows,class_column)
     # Now calculate the entropy
     ent = 0.0
@@ -163,14 +164,16 @@ def build_tree(answer_to_parent, rows, class_label_col, is_single_val=False
                ,scoref=entropy, total_score_func=total_entropy_of_split):
     decision_node = DecisionNode()
     decision_node.results = rows
+    decision_node.class_id = class_label_col
     decision_node.answer_to_parent = answer_to_parent
-    if len(rows) == 0: return decision_node  # tbd
+    if len(rows) == 0:
+        return decision_node  # tbd
 
     current_score = total_score_func({"1": rows}, class_label_col)
     parent_score = current_score
 
     if parent_score == 0:
-        return decision_node  # tbd
+        return decision_node
 
     # Set up some variables to track the best split criteria
     best_column = None
@@ -182,7 +185,6 @@ def build_tree(answer_to_parent, rows, class_label_col, is_single_val=False
         # print("len rows", len(rows))
         sets, numeric_bool = divide_rows(rows, col_id, is_single_val)
         # print(len(sets.values()))
-        # Check if this split will be caught into an endless cycle
         current_num_val = None
         # Score for numeric values
         if numeric_bool:
@@ -206,7 +208,7 @@ def build_tree(answer_to_parent, rows, class_label_col, is_single_val=False
             best_num_val = current_num_val
 
     gain = parent_score - current_score
-    print(gain)
+    # print(gain)
     if gain < 0.0001:  # to set up min gain
         for row in rows:
             print(row)
@@ -214,7 +216,16 @@ def build_tree(answer_to_parent, rows, class_label_col, is_single_val=False
         print("current_score=", current_score)
         print("best_col=", best_column)
         print("gain=", gain)
-        return decision_node  # tbd
+
+        if decision_node.class_id > 0:
+            decision_node.class_id -= 1
+        else:
+            return decision_node
+        return build_tree(decision_node.answer_to_parent,
+                          decision_node.rows, decision_node.class_id,
+                          is_single_val=False,
+                          scoref=entropy, total_score_func=total_entropy_of_split)
+
 
     # gain_ratio
         # gain_ratio = (parent_score - score) / intrinsic_info(sets)
@@ -241,7 +252,7 @@ def build_tree(answer_to_parent, rows, class_label_col, is_single_val=False
         return decision_node
 
     for attr_val, row_set in row_sets.items():
-        child = build_tree(attr_val, row_set, class_label_col, is_single_val, scoref, total_score_func)
+        child = build_tree(attr_val, row_set, decision_node.class_id, is_single_val, scoref, total_score_func)
         decision_node.children.append(child)
 
     return decision_node
