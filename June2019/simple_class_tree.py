@@ -15,7 +15,7 @@ def read_data(filename):
     header = True
     for line in input_f:
         row_id += 1
-        arr = line.rstrip().split(',')
+        arr = line.rstrip().split('\t')
         # Get a list of header
         if header:
             NUM_COLS = len(arr)
@@ -38,10 +38,6 @@ def read_data(filename):
 
             rows.append([row]+[labels])
 
-            if len(labels) != 1:
-                print("Error on row", row_id)
-                print("Not all labels specified")
-                exit(1)
     input_f.close()
     return rows, feature_dict
 
@@ -139,7 +135,7 @@ def write_json(json_tree):
 if __name__ == "__main__":
     print("Reading in file...")
     # flower_table: list of list of feature rows, flower_features: list of attributes
-    flower_table, flower_features = read_data("adult_content/weight_dataset.csv")
+    flower_table, flower_features = read_data("d_flower_data_full.tsv")
     label_col_index = ask_level_input(flower_table)  # return the level index number
 
     # delimited_flower_table = flatten_alt_values(flower_table)
@@ -162,7 +158,7 @@ if __name__ == "__main__":
 
     print("Building tree...")
     tree = build_tree(None, flower_table, label_col_index, False)  # build tree
-    print_tree(tree, flower_features, label_col_index)
+    # print_tree(tree, flower_features, label_col_index)
 
     leaf_label_count_arr = []  # a list of number of leaf labels
     depth_arr = []  # a list of branch depths

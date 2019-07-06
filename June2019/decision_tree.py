@@ -125,8 +125,6 @@ def divide_rows(rows, col_id, is_single_val, separator=' or '):
 
 
 def total_entropy_of_split(row_sets, class_label_col, scoref=entropy):
-    log2 = lambda x: log(x) / log(2)
-
     total_row_len = 0
     for val_list in row_sets.values():
         total_row_len += len(val_list)
@@ -177,16 +175,12 @@ def build_tree(answer_to_parent, rows, class_label_col, is_single_val=False
     # Set up some variables to track the best split criteria
     best_column = None
     best_num_val = None
-    # best_gain = 0
     column_count = len(rows[0][0])
 
     # Find the best col
     for col_id in range(column_count):
-        print("start dividing")
-
         # print("len rows", len(rows))
         sets, numeric_bool = divide_rows(rows, col_id, is_single_val)
-        print("end dividing")
         # print(len(sets.values()))
         # Check if this split will be caught into an endless cycle
         current_num_val = None
@@ -211,11 +205,16 @@ def build_tree(answer_to_parent, rows, class_label_col, is_single_val=False
             best_column = col_id
             best_num_val = current_num_val
 
-        gain = parent_score - current_score
-        print(gain)
-
-        if gain < 0.001:  # to set up min gain
-            return decision_node  # tbd
+    gain = parent_score - current_score
+    print(gain)
+    if gain < 0.0001:  # to set up min gain
+        for row in rows:
+            print(row)
+        print("parent_score=", parent_score)
+        print("current_score=", current_score)
+        print("best_col=", best_column)
+        print("gain=", gain)
+        return decision_node  # tbd
 
     # gain_ratio
         # gain_ratio = (parent_score - score) / intrinsic_info(sets)
