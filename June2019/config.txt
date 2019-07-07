@@ -1,2 +1,2 @@
-class_column=3
-data_delimiter=\t
+class_column=0
+data_delimiter=,
