@@ -210,21 +210,7 @@ def build_tree(answer_to_parent, rows, class_label_col, is_single_val=False
     gain = parent_score - current_score
     # print(gain)
     if gain < 0.0001:  # to set up min gain
-        for row in rows:
-            print(row)
-        print("parent_score=", parent_score)
-        print("current_score=", current_score)
-        print("best_col=", best_column)
-        print("gain=", gain)
-
-        if decision_node.class_id > 0:
-            decision_node.class_id -= 1
-        else:
-            return decision_node
-        return build_tree(decision_node.answer_to_parent,
-                          decision_node.rows, decision_node.class_id,
-                          is_single_val=False,
-                          scoref=entropy, total_score_func=total_entropy_of_split)
+        return decision_node
 
 
     # gain_ratio

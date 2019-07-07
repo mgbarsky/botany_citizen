@@ -17,11 +17,11 @@ def read_data(filename, delimiter):
         row_id += 1
         arr = line.rstrip().split(delimiter)
 
-        print(arr)
+
         # Get a list of header
         if header:
             NUM_COLS = len(arr)
-            print(NUM_COLS)
+
             for i in range(len(arr)):
                 if arr[i].strip() != '':
                     feature_dict.append(arr[i])

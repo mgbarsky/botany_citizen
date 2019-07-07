@@ -1,2 +1,2 @@
-class_column=0
+class_column=1
 data_delimiter=,
