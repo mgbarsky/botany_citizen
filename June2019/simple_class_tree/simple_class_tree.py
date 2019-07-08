@@ -3,12 +3,11 @@ import json
 import itertools
 
 NUM_COLS = 0  # 11 or 23
-LABEL_COL_INDEX = -4  # the index of hierarchical label to classify
-
+CONFIG_FILE = "config.txt"
 
 def read_data(filename):
     global NUM_COLS
-    input_f = open(filename, encoding="latin1")
+    input_f = open(filename, encoding="UTF-8")
     rows = []
     feature_dict = []
     row_id = 0
@@ -29,8 +28,9 @@ def read_data(filename):
                 exit(1)
             for i in range(len(arr)):
                 try:
-                    arr[i] = int(arr[i])
+                    arr[i] = int(arr[i].strip())
                 except ValueError:
+                    arr[i] = arr[i].strip()
                     pass
 
             row = arr[0:NUM_COLS]
@@ -38,12 +38,22 @@ def read_data(filename):
 
             rows.append([row]+[labels])
 
-            if len(labels) != 4:
-                print("Error on row", row_id)
-                print("Not all labels specified")
-                exit(1)
     input_f.close()
     return rows, feature_dict
+
+
+def get_config_property(key):
+    f = open(CONFIG_FILE)
+    for line in f:
+        line = line.strip()
+        a = line.split('=')
+        if a[0] == key:
+            f.close()
+            return a[1]
+
+    f.close()
+    print("No value for key", key)
+    return None
 
 
 def flatten_alt_values(rows):  # deliminator is used for splitting multiple values at a col
@@ -99,7 +109,7 @@ def leaf_label_and_depth_count(current_node, leaf_label_count_arr, depth_arr, cu
     # Leaf
     if current_node.results and len(current_node.results) > 0:
         leaf_label_count_arr.append(len(uniquecounts(current_node.results,
-                                                     len(current_node.results[0][1]) + LABEL_COL_INDEX).keys()))
+                                                     label_col_index).keys()))
         return
 
     # Compute the depth of each sub-branch
@@ -110,8 +120,8 @@ def leaf_label_and_depth_count(current_node, leaf_label_count_arr, depth_arr, cu
         leaf_label_and_depth_count(child, leaf_label_count_arr, depth_arr, current_depth)
 
 
-def get_max_and_ave(leaf_label_count_arr):
-    return max(leaf_label_count_arr), sum(leaf_label_count_arr)/len(leaf_label_count_arr)
+def get_max_and_ave(count_arr):
+    return max(count_arr), sum(count_arr)/len(count_arr)
 
 
 def write_json(json_tree):
@@ -123,29 +133,40 @@ if __name__ == "__main__":
     print("Reading in file...")
     # flower_table: list of list of feature rows, flower_features: list of attributes
     flower_table, flower_features = read_data("d_flower_data_full.tsv")
-    delimited_flower_table = flatten_alt_values(flower_table)
-    print("{} observations, {} features".format(len(delimited_flower_table), NUM_COLS))
+    label_col_index = get_config_property("class_column")  # return the level index number
+    try:
+        label_col_index = int(label_col_index)
+    except:
+        print("Invalid value for key", "'class_column'")
+        exit(1)
+
+    # delimited_flower_table = flatten_alt_values(flower_table)
+    print("{} observations, {} features".format(len(flower_table), NUM_COLS))
+
     # flower_features = ["Q1", "Q2", "Q3", "Q4", "Q5"]
-    # delimited_flower_table = [
-    #     [['?', "?", 1, "a", "x"], ["class1", "top class3"]],
+    # flower_table = [
+    #     [[2, "?", '?', "a or b", "x"], ["class1", "top class3"]],
     #     [[4, "b", 1, "b", "x"], ["class1", "top class4"]],
     #     [[3, "b", 3, "c", "y"], ["class1", "top class3"]],
-    #     [[20, "a", 20, "a", "x"], ["class2", "top class2"]],
+    #     [[20, "a or b", 20, "a", "x"], ["class2", "top class2"]],
     #     [['?', "a", 5, "?", "x"], ["class2", "top class2"]],
-    #     [[8, "b", 2, "c", "?"], ["class2", "top class4"]],
+    #     [[8, "b", 2, "a or b or c", "?"], ["class2", "top class4"]],
     #     [[10, "b", 3, "c", "x"], ["class2", "top class2"]],
     #     [[10, "b", 6, "b", "z"], ["class2", "top class2"]],
-    #     [[15, "a", 10, "d", "z"], ["class2", "top class5"]],
-    #     [['?', "a", 12, "d", "?"], ["class2", "top class5"]],
+    #     [[15, "a or b or c", 10, "c or d", "x or z"], ["class2", "top class4"]],
+    #     [['?', "a", 12, "d", "?"], ["class2", "top class3"]],
     # ]
+    # label_col_index = ask_level_input(flower_table)  # return the level index    number
+
     print("Building tree...")
-    tree = build_tree(None, delimited_flower_table, len(delimited_flower_table[0][1])+LABEL_COL_INDEX)  # build tree
-    print_tree(tree, flower_features, LABEL_COL_INDEX)
+    min_gain = float(get_config_property("min_gain"))
+    tree = build_tree(None, flower_table, label_col_index, min_gain)  # build tree
+    # print_tree(tree, flower_features, label_col_index)
 
     leaf_label_count_arr = []  # a list of number of leaf labels
     depth_arr = []  # a list of branch depths
 
-    leaf_label_and_depth_count(tree, leaf_label_count_arr, depth_arr)
+    leaf_label_and_depth_count(tree, leaf_label_count_arr, depth_arr, False)
 
     # Get max number of labels on leaves and average number of labels
     max_leaf_lab_num, ave_leaf_lab_num = get_max_and_ave(leaf_label_count_arr)
@@ -158,5 +179,5 @@ if __name__ == "__main__":
     print("The average number of classes per leaf is: ", ave_leaf_lab_num)
 
     json_tree = {}
-    construct_json(tree, flower_features, LABEL_COL_INDEX, json_tree)
+    construct_json(tree, flower_features, label_col_index, json_tree)
     write_json(json_tree)

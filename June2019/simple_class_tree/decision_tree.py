@@ -9,7 +9,6 @@ class DecisionNode:
     self.answer_to_parent = answer_to_parent
     self.children = children  # list of decision nodes
     self.results = results  # list of final class labels - in case it is a leaf node
-    self.class_id = -1
 
 
 # Create counts of possible class labels in the same group of rows
@@ -26,8 +25,8 @@ def uniquecounts(rows, class_col_id):
 # Entropy is the sum of p(x)log(p(x)) across all
 # the different labels for the records in the same group
 def entropy(rows, class_column):
-    log2 = lambda x: 0 if x == 0 else log(x)/log(2)
-    results = uniquecounts(rows,class_column)
+    log2 = lambda x:log(x)/log(2)
+    results=uniquecounts(rows,class_column)
     # Now calculate the entropy
     ent = 0.0
     for r in results.keys():
@@ -160,20 +159,18 @@ def intrinsic_info(row_sets):
 
 # Divides a set on a specific column. Can handle numeric
 # or nominal values
-def build_tree(answer_to_parent, rows, class_label_col, min_gain=0.0001, is_single_val=False
+def build_tree(answer_to_parent, rows, class_label_col, min_gain=0.001, is_single_val=False
                ,scoref=entropy, total_score_func=total_entropy_of_split):
     decision_node = DecisionNode()
     decision_node.results = rows
-    decision_node.class_id = class_label_col
     decision_node.answer_to_parent = answer_to_parent
-    if len(rows) == 0:
-        return decision_node
+    if len(rows) == 0: return decision_node  # tbd
 
     current_score = total_score_func({"1": rows}, class_label_col)
     parent_score = current_score
 
     if parent_score == 0:
-        return decision_node
+        return decision_node  # tbd
 
     # Set up some variables to track the best split criteria
     best_column = None
@@ -185,6 +182,7 @@ def build_tree(answer_to_parent, rows, class_label_col, min_gain=0.0001, is_sing
         # print("len rows", len(rows))
         sets, numeric_bool = divide_rows(rows, col_id, is_single_val)
         # print(len(sets.values()))
+        # Check if this split will be caught into an endless cycle
         current_num_val = None
         # Score for numeric values
         if numeric_bool:
@@ -215,16 +213,7 @@ def build_tree(answer_to_parent, rows, class_label_col, min_gain=0.0001, is_sing
         print("current_score=", current_score)
         print("best_col=", best_column)
         print("gain=", gain)
-
-        if decision_node.class_id > 0 and gain != 0:  # when not reaching lowest level and not all values are the same
-            decision_node.class_id -= 1
-        else:
-            return decision_node
-
-        return build_tree(decision_node.answer_to_parent,
-                          decision_node.results, decision_node.class_id, min_gain,
-                          is_single_val=False,
-                          scoref=entropy, total_score_func=total_entropy_of_split)
+        return decision_node  # tbd
 
     # gain_ratio
         # gain_ratio = (parent_score - score) / intrinsic_info(sets)
@@ -251,7 +240,7 @@ def build_tree(answer_to_parent, rows, class_label_col, min_gain=0.0001, is_sing
         return decision_node
 
     for attr_val, row_set in row_sets.items():
-        child = build_tree(attr_val, row_set, decision_node.class_id, min_gain, is_single_val, scoref, total_score_func)
+        child = build_tree(attr_val, row_set, class_label_col, min_gain, is_single_val, scoref, total_score_func)
         decision_node.children.append(child)
 
     return decision_node
@@ -273,11 +262,11 @@ def print_tree(current_node, questions_list, label_col_index, indent=''):
 
 
 # Construct json based on the tree
-def construct_json(current_node, questions_list, json_tree):
+def construct_json(current_node, questions_list, label_col_index, json_tree):
     name = '(A:' + str(current_node.answer_to_parent) + ').  '
     if current_node.results and len(current_node.results) > 0:
-        for label in uniquecounts(current_node.results, current_node.class_id).items():
-            name = name + str(current_node.class_id) + ':' + str(label) + '\n'
+        for label in uniquecounts(current_node.results, label_col_index).items():
+            name += str(label) + '\n'
         # Leaf
         json_tree["name"] = name
         return json_tree
@@ -293,5 +282,5 @@ def construct_json(current_node, questions_list, json_tree):
     count = 0
     for child in current_node.children:
         json_tree["children"].append({})
-        construct_json(child, questions_list, json_tree["children"][count])
+        construct_json(child, questions_list, label_col_index, json_tree["children"][count])
         count += 1
