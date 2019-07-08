@@ -2,8 +2,10 @@ from decision_tree import *
 import json
 import itertools
 
+
 NUM_COLS = 11  # Number of columns in the dataset
 CONFIG_FILE = "config.txt"
+
 
 def read_data(filename):
     global NUM_COLS
@@ -24,7 +26,7 @@ def read_data(filename):
             header = False
         else:
             if len(arr) < NUM_COLS:
-                print("Error on row",row_id, "Not enough columns!")
+                print("Error on row", row_id, "Not enough columns!")
                 exit(1)
             for i in range(len(arr)):
                 try:
@@ -110,7 +112,8 @@ if __name__ == "__main__":
     # label_col_index = ask_level_input(flower_table)  # return the level index    number
 
     print("Building tree...")
-    tree = build_tree(None, flower_table, label_col_index, False)  # build tree
+    min_gain = float(get_config_property("min_gain"))
+    tree = build_tree(None, flower_table, label_col_index, min_gain)  # build tree
     # print_tree(tree, flower_features, label_col_index)
 
     leaf_label_count_arr = []  # a list of number of leaf labels
@@ -129,5 +132,5 @@ if __name__ == "__main__":
     print("The average number of classes per leaf is: ", ave_leaf_lab_num)
 
     json_tree = {}
-    construct_json(tree, flower_features, label_col_index, json_tree)
+    construct_json(tree, flower_features, json_tree)
     write_json(json_tree)
