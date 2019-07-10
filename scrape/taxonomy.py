@@ -7,6 +7,7 @@ LINK = "http://www.worldfloraonline.org/classification"
 STOPPING_DEPTH = 4
 CHECK_FREQUENCY = 0.1
 data = {}
+data2 = {}
 
 
 # Wait for a element of class to load
@@ -60,6 +61,17 @@ if __name__ == "__main__":
     browser.get(LINK)
 
     dfs(browser, data, 0)
+    try:
+        dfs(browser, data2, 0)
+        print('Run twice')
+    except:
+        pass
+
     print(data)
+    print(data2)
+
     with open('taxonomy2.json', 'w') as json_file:
         json.dump(data, json_file)
+
+    with open('taxonomy3.json', 'w') as json_file2:
+        json.dump(data2, json_file2)
