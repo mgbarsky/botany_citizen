@@ -15,7 +15,7 @@ def recur(element, path):
 
 def generate_map(filename):
     global plant_json
-    input_f = open(filename)
+    input_f = open(filename, encoding="utf-8")
     plant_json = json.load(input_f)
     input_f.close()
 
@@ -23,8 +23,8 @@ def generate_map(filename):
 
 
 def taxonomy_table(input_name, output_name):
-    input_f = open(input_name)
-    output_f = open(output_name, 'w')
+    input_f = open(input_name, encoding="utf-8")
+    output_f = open(output_name, 'w', encoding="utf-8")
 
     header = True
     for line in input_f:
@@ -47,5 +47,5 @@ def taxonomy_table(input_name, output_name):
 
 
 if __name__ == "__main__":
-    generate_map("taxonomy3.json")
+    generate_map("taxonomy2.json")
     taxonomy_table("flower_data.tsv", "d_flower_data.tsv")
