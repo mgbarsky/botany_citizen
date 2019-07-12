@@ -12,28 +12,43 @@ class DecisionNode:
     self.class_id = 0
 
 
-# Create counts of possible class labels in the same group of rows
-def uniquecounts(rows, class_col_id):
-    results = {}
+# Sum of squared distances from the mean
+def vector_variance(rows):
+    # Only happens for numeric splits which have 0 entries in one region, variance reduction will be 0
+    if len(rows) == 0:
+        return 0
+
+    # Calculate mean vector
+    mean_vector = [0]*len(rows[0][1])  # Initialize mean vector to 0
     for row in rows:
-        # The result is in the column specified by scorevar
-        r = row[1][class_col_id]
-        if r not in results: results[r] = 0
-        results[r] += 1
-    return results  # An array of counts per each unique val in the labels column
+        vector = row[1]
+        for i in range(len(vector)):
+            mean_vector[i] += vector[i]
+
+    for i in range(len(mean_vector)):
+        mean_vector[i] /= len(rows)  # Average
+
+    sum_squared = 0
+    for row in rows:
+        vector = row[1]
+        for i in range(len(vector)):
+            sum_squared += pow(vector[i] - mean_vector[i], 2)
+
+    return sum_squared/len(rows)
 
 
-# Entropy is the sum of p(x)log(p(x)) across all
-# the different labels for the records in the same group
-def entropy(rows, class_column):
-    log2 = lambda x: 0 if x == 0 else log(x)/log(2)
-    results=uniquecounts(rows,class_column)
-    # Now calculate the entropy
-    ent = 0.0
-    for r in results.keys():
-        p = float(results[r])/len(rows)  # probability at the level
-        ent = ent-p*log2(p)
-    return ent
+def vector_variance_of_split(row_sets, scoref=vector_variance):
+    total_row_len = 0
+    for val_list in row_sets.values():
+        total_row_len += len(val_list)
+
+    total_variance = 0
+    for k, val_list in row_sets.items():
+        w = len(val_list) / total_row_len
+        var = scoref(val_list)
+        total_variance += w * var
+
+    return total_variance
 
 
 # Take a value (either single or separated by ' or ') and return a list that contains value(s)
@@ -125,51 +140,17 @@ def divide_rows(rows, col_id, is_single_val, separator=' or '):
     return result, numeric_bool
 
 
-def total_entropy_of_split(row_sets, class_label_col, scoref=entropy):
-    total_row_len = 0
-    for val_list in row_sets.values():
-        total_row_len += len(val_list)
-
-    total_ent = 0
-    for val_list in row_sets.values():
-        w = len(val_list) / total_row_len
-        ent = scoref(val_list, class_label_col)
-        total_ent += w * ent
-
-    return total_ent
-
-
-def intrinsic_info(row_sets):
-    log2 = lambda x: log(x) / log(2)
-
-    total_row_len = 0
-    for val_list in row_sets.values():
-        total_row_len += len(val_list)
-
-    intrinsic_val = 0
-    for val_list in row_sets.values():
-        if not val_list: continue
-        p = len(val_list) / total_row_len
-        intrinsic_val -= p*log2(p)
-
-    if intrinsic_val == 0:  # If there is only a single branch; this will cause the gain ratio to be 0
-        return float("inf")
-
-    return intrinsic_val
-
-
 # Divides a set on a specific column. Can handle numeric
 # or nominal values
-def build_tree(answer_to_parent, rows, class_label_col, is_single_val=False
-               ,scoref=entropy, total_score_func=total_entropy_of_split):
+def build_tree(answer_to_parent, rows, is_single_val=False
+               ,scoref=vector_variance, total_score_func=vector_variance_of_split):
     decision_node = DecisionNode()
     decision_node.results = rows
-    decision_node.class_id = class_label_col
     decision_node.answer_to_parent = answer_to_parent
     if len(rows) == 0:
         return decision_node  # tbd
 
-    current_score = total_score_func({"1": rows}, class_label_col)
+    current_score = scoref(rows)
     parent_score = current_score
 
     if parent_score == 0:
@@ -191,7 +172,7 @@ def build_tree(answer_to_parent, rows, class_label_col, is_single_val=False
             # Find the current numeric val
             min_num_score = None
             for val_key, row_sets in sets.items():
-                cur_num_score = total_score_func(row_sets, class_label_col)
+                cur_num_score = total_score_func(row_sets)
                 if min_num_score is None or cur_num_score < min_num_score:
                     min_num_score = cur_num_score
                     current_num_val = val_key
@@ -199,7 +180,7 @@ def build_tree(answer_to_parent, rows, class_label_col, is_single_val=False
 
         # Score for categorical value
         else:
-            score = total_score_func(sets, class_label_col)
+            score = total_score_func(sets)
 
         # total entropy
         if score < current_score:
@@ -208,34 +189,8 @@ def build_tree(answer_to_parent, rows, class_label_col, is_single_val=False
             best_num_val = current_num_val
 
     gain = parent_score - current_score
-    # print(gain)
     if gain < 0.0001:  # to set up min gain
-        for row in rows:
-            print(row)
-        print("parent_score=", parent_score)
-        print("current_score=", current_score)
-        print("best_col=", best_column)
-        print("gain=", gain)
-
-        if decision_node.class_id > 0:
-            decision_node.class_id -= 1
-        else:
-            return decision_node
-        return build_tree(decision_node.answer_to_parent,
-                          decision_node.results, decision_node.class_id,
-                          is_single_val=False,
-                          scoref=entropy, total_score_func=total_entropy_of_split)
-
-
-    # gain_ratio
-        # gain_ratio = (parent_score - score) / intrinsic_info(sets)
-    #     if gain_ratio > best_gain:
-    #         best_gain = gain_ratio
-    #         best_column = col_id
-    #         best_num_val = current_num_val
-    #
-    # if best_gain < 0.1:  # to set up min gain
-    #     return decision_node  # tbd
+        return decision_node
 
     decision_node.results = []
     decision_node.attr_col = best_column
@@ -252,7 +207,8 @@ def build_tree(answer_to_parent, rows, class_label_col, is_single_val=False
         return decision_node
 
     for attr_val, row_set in row_sets.items():
-        child = build_tree(attr_val, row_set, decision_node.class_id, is_single_val, scoref, total_score_func)
+        child = build_tree(attr_val, row_set,
+                           is_single_val=is_single_val, scoref=scoref, total_score_func=total_score_func)
         decision_node.children.append(child)
 
     return decision_node
@@ -273,13 +229,44 @@ def print_tree(current_node, questions_list, label_col_index, indent=''):
         print_tree(child, questions_list, label_col_index, indent)
 
 
+# Create counts of possible class labels in the same group of rows
+def uniquecounts(rows, class_col_id):
+    results = {}
+    for row in rows:
+        # The result is in the column specified by scorevar
+        r = row[1][class_col_id]
+        if r not in results: results[r] = 0
+        results[r] += 1
+    return results  # An array of counts per each unique val in the labels column
+
+
+# Average the vectors at a leaf node and get a score for each label (only include nonzero ones)
+# Return a list of tuples of (label name, score)
+def vectors_to_labels(rows, label_list):
+    label_scores = []
+    average = [0]*len(label_list)  # Initialize average to zero vector
+
+    for row in rows:
+        vector = row[1]
+        for i in range(len(label_list)):
+            average[i] += vector[i]
+
+    for i in range(len(label_list)):
+        average[i] /= len(rows)
+        if average[i] != 0:
+            label_scores.append((label_list[i], average[i]))  # If the score is nonzero, append (label name, score)
+
+    return label_scores
+
+
 # Construct json based on the tree
-def construct_json(current_node, questions_list, label_col_index, json_tree):
+def construct_json(current_node, questions_list, label_list, json_tree):
     name = '(A:' + str(current_node.answer_to_parent) + ').  '
     if current_node.results and len(current_node.results) > 0:
-        for label in uniquecounts(current_node.results, label_col_index).items():
-            name += str(label) + '\n'
         # Leaf
+        for tup in vectors_to_labels(current_node.results, label_list):
+            name += "\n{}: {}".format(tup[0], round(tup[1], 2))
+
         json_tree["name"] = name
         return json_tree
 
@@ -294,5 +281,5 @@ def construct_json(current_node, questions_list, label_col_index, json_tree):
     count = 0
     for child in current_node.children:
         json_tree["children"].append({})
-        construct_json(child, questions_list, label_col_index, json_tree["children"][count])
+        construct_json(child, questions_list, label_list, json_tree["children"][count])
         count += 1

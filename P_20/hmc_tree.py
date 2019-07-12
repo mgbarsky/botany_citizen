@@ -132,30 +132,27 @@ def main():
     print("{} observations, {} features".format(len(flower_table), NUM_COLS))
 
     label_set, label_list = convert_into_binary(flower_table)
-    for row in flower_table:
-        print(row)
-    exit(1)
 
     print("Building tree...")
-    tree = build_tree(None, flower_table, label_col_index, False)  # build tree
+    tree = build_tree(None, flower_table, False)  # build tree
 
     leaf_label_count_arr = []  # a list of number of leaf labels
     depth_arr = []  # a list of branch depths
 
-    leaf_label_and_depth_count(tree, leaf_label_count_arr, depth_arr, False)
+    #leaf_label_and_depth_count(tree, leaf_label_count_arr, depth_arr, False)
 
     # Get max number of labels on leaves and average number of labels
-    max_leaf_lab_num, ave_leaf_lab_num = get_max_and_ave(leaf_label_count_arr)
+    #max_leaf_lab_num, ave_leaf_lab_num = get_max_and_ave(leaf_label_count_arr)
     # Get max depth and average depth of the tree
-    max_dep, ave_depth = get_max_and_ave(depth_arr)
+    #max_dep, ave_depth = get_max_and_ave(depth_arr)
 
-    print("The max depth of the tree is: ", max_dep)
-    print("The average depth of the tree is: ", ave_depth)
-    print("The max number of labels is: ", max_leaf_lab_num)
-    print("The average number of classes per leaf is: ", ave_leaf_lab_num)
+    #print("The max depth of the tree is: ", max_dep)
+    #print("The average depth of the tree is: ", ave_depth)
+    #print("The max number of labels is: ", max_leaf_lab_num)
+    #print("The average number of classes per leaf is: ", ave_leaf_lab_num)
 
     json_tree = {}
-    construct_json(tree, flower_features, label_col_index, json_tree)
+    construct_json(tree, flower_features, label_list, json_tree)
     write_json(json_tree)
 
 
