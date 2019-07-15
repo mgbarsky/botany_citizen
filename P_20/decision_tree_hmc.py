@@ -13,7 +13,7 @@ class DecisionNode:
 
 
 # Sum of squared distances from the mean
-def vector_variance(rows):
+def vector_variance(rows, weights):
     # Only happens for numeric splits which have 0 entries in one region, variance reduction will be 0
     if len(rows) == 0:
         return 0
@@ -32,12 +32,13 @@ def vector_variance(rows):
     for row in rows:
         vector = row[1]
         for i in range(len(vector)):
-            sum_squared += pow(vector[i] - mean_vector[i], 2)
+            # Weight squared differences smaller when deeper in the tree
+            sum_squared += weights[i]*pow(vector[i] - mean_vector[i], 2)
 
     return sum_squared/len(rows)
 
 
-def vector_variance_of_split(row_sets, scoref=vector_variance):
+def vector_variance_of_split(row_sets, weights, scoref=vector_variance):
     total_row_len = 0
     for val_list in row_sets.values():
         total_row_len += len(val_list)
@@ -45,7 +46,7 @@ def vector_variance_of_split(row_sets, scoref=vector_variance):
     total_variance = 0
     for k, val_list in row_sets.items():
         w = len(val_list) / total_row_len
-        var = scoref(val_list)
+        var = scoref(val_list, weights)
         total_variance += w * var
 
     return total_variance
@@ -142,7 +143,7 @@ def divide_rows(rows, col_id, is_single_val, separator=' or '):
 
 # Divides a set on a specific column. Can handle numeric
 # or nominal values
-def build_tree(answer_to_parent, rows, is_single_val=False
+def build_tree(answer_to_parent, rows, weights, is_single_val=False
                ,scoref=vector_variance, total_score_func=vector_variance_of_split):
     decision_node = DecisionNode()
     decision_node.results = rows
@@ -150,7 +151,7 @@ def build_tree(answer_to_parent, rows, is_single_val=False
     if len(rows) == 0:
         return decision_node  # tbd
 
-    current_score = scoref(rows)
+    current_score = scoref(rows, weights)
     parent_score = current_score
 
     if parent_score == 0:
@@ -163,16 +164,14 @@ def build_tree(answer_to_parent, rows, is_single_val=False
 
     # Find the best col
     for col_id in range(column_count):
-        # print("len rows", len(rows))
         sets, numeric_bool = divide_rows(rows, col_id, is_single_val)
-        # print(len(sets.values()))
         current_num_val = None
         # Score for numeric values
         if numeric_bool:
             # Find the current numeric val
             min_num_score = None
             for val_key, row_sets in sets.items():
-                cur_num_score = total_score_func(row_sets)
+                cur_num_score = total_score_func(row_sets, weights)
                 if min_num_score is None or cur_num_score < min_num_score:
                     min_num_score = cur_num_score
                     current_num_val = val_key
@@ -180,7 +179,7 @@ def build_tree(answer_to_parent, rows, is_single_val=False
 
         # Score for categorical value
         else:
-            score = total_score_func(sets)
+            score = total_score_func(sets, weights)
 
         # total entropy
         if score < current_score:
@@ -189,7 +188,7 @@ def build_tree(answer_to_parent, rows, is_single_val=False
             best_num_val = current_num_val
 
     gain = parent_score - current_score
-    if gain < 0.0001:  # to set up min gain
+    if gain == 0:  # to set up min gain
         return decision_node
 
     decision_node.results = []
@@ -207,37 +206,11 @@ def build_tree(answer_to_parent, rows, is_single_val=False
         return decision_node
 
     for attr_val, row_set in row_sets.items():
-        child = build_tree(attr_val, row_set,
+        child = build_tree(attr_val, row_set, weights,
                            is_single_val=is_single_val, scoref=scoref, total_score_func=total_score_func)
         decision_node.children.append(child)
 
     return decision_node
-
-
-def print_tree(current_node, questions_list, label_col_index, indent=''):
-    node_repr = indent + "parent_answ={} ".format(current_node.answer_to_parent)
-
-    if current_node.results and len(current_node.results) > 0:
-        node_repr += str(uniquecounts(current_node.results, label_col_index))
-        print(node_repr)
-        return
-
-    node_repr += "q={} ".format(questions_list[current_node.attr_col])
-    print(node_repr)
-    indent += '  '
-    for child in current_node.children:
-        print_tree(child, questions_list, label_col_index, indent)
-
-
-# Create counts of possible class labels in the same group of rows
-def uniquecounts(rows, class_col_id):
-    results = {}
-    for row in rows:
-        # The result is in the column specified by scorevar
-        r = row[1][class_col_id]
-        if r not in results: results[r] = 0
-        results[r] += 1
-    return results  # An array of counts per each unique val in the labels column
 
 
 # Average the vectors at a leaf node and get a score for each label (only include nonzero ones)
