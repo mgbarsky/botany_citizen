@@ -1,0 +1,392 @@
+Value ID	Value
+0	?
+1	terrestrial
+2	wetlands
+3	aquatic
+4	blue to purple
+5	white
+6	yellow
+7	orange
+8	pink to red
+9	green to brown
+10	simple
+11	compound
+12	lobes
+13	teeth and lobes
+14	teeth
+15	entire
+16	radially symmetrical
+17	bilaterally symmetrical
+18	asymmetrical
+19	not fused
+20	fused into a cup or tube
+21	dry and splits open
+22	dry but does not split open
+23	fleshy
+24	no
+25	yes
+26	fused
+27	solitary
+28	some
+29	superior ovary and no hypanthium
+30	inferior ovary, with or without hypanthium
+31	superior ovary and hypanthium
+32	both pollen- and seed-producing parts
+33	only pollen- or only seed-producing parts
+34	branched above the base
+35	two or more completely separate styles
+36	narrow at the tip and unbranched
+37	lobed at the tip, and unbranched
+38	knob-like at the tip, and unbranched
+39	unbranched, but has two or more narrow appendages
+40	mostly 5-merous
+41	mostly 4-merous
+42	1 tepal has tubercle
+43	2-3 tepals have tubercles
+44	no tubercles
+45	have teeth or spines
+46	tubercle extends to >= 1/3 of the flower
+47	tubercle  extends below the base of tepal
+48	spots or stripes
+49	no marks
+50	above the point of petal  attachment
+51	below the point of petal attachment
+52	thin, delicate, pigmented
+53	thin, delicate, pigmented and petals are 3-5 mm long
+54	thin, delicate, pigmented and petals are 6-8 mm long
+55	green and/or leefy in texture
+56	side petals with narrow hairs
+57	spurred petals are hairless
+58	side petals with knob-shaped hairs
+59	spurred petals hairy
+60	side petals are hairless
+61	petals longer than sepals
+62	petals about same size as sepals
+63	petals shorter than sepals
+64	straihgt or slunt outwards
+65	curled inwards
+66	synoecious: all flowers have carpels and stamens
+67	monoecious: each flower has either carpel or stamen, but both types on the same plant
+68	dioecious: all the flowers of the same plant have either carpel or stamen
+69	polygamous: flowers with both carpels and stamens, with only carpels or stamens, all in the same plant
+70	is different
+71	is similar
+72	attached at the bases of petals
+73	not attached to petals
+74	lined up with sepals
+75	lined up with petals
+76	at the tip of the style
+77	on the inner surface of the style
+78	in lines on the ovary
+79	all the flowers have both carpels and stamens
+80	some or all the flowers have stamens only
+81	with 2 lobes
+82	with 1 lobe
+83	perpendicular to the plane of the perianth (vertical)
+84	parallel to the plane of the perianth (horizontal)
+85	circular
+86	oval
+87	with tiny rounded bumps or projections (papillose)
+88	with tiny rounded bumps or projections plus parallel lines or ridges (striate-papillose)
+89	smooth
+90	with irregular bumps (rough)
+91	with fine-grained irregularities (slightly rough)
+92	dry, indehiscent, and usually one-seeded fruit (achene)
+93	pericarp is loosely attached and often readily removed (utricle)
+94	red
+95	purple
+96	green
+97	brown
+98	blue
+99	entirely green
+100	spotted or tinted with red to purple-brown
+101	splits on or near the middle
+102	bursts open or shatters without a clear seam
+103	splits below the middle
+104	splits above the middle
+105	the surface is wrinkled (reticulate), or covered with bumps (tuberculate)
+106	with elongate beak at the tip that does not split open
+107	do not split open at maturity (indehiscent)
+108	base of the fruit notched or cordate
+109	base of fruit truncate to rounded
+110	splits along seams to release seeds (capsule)
+111	splits into sections with one or more seeds each (schizocarp)
+112	one ovary splits along one side to release the seeds (follicle)
+113	fleshy with the wall enclosing sections each  with two or more seeds (berry)
+114	dry usually one-seeded does not split open (achene)
+115	elongated height/width >= 3 and dehisces by two valves leaving  persistent replum to which seeds are attached (silique)
+116	elongated but height/width < 3 (silicle)
+117	splits around the middle and the top falls off exposing the (pyxis)
+118	splits into two valves, but has a single carpel like a pea pod (legume)
+119	fleshy, with  firm inner ovary wall that encloses a single seed (drupe)
+120	dry and indehiscent, with a hard wall, usually containing only one seed (nut)
+121	composed of multiple fused ovaries from one flower (aggregate)
+122	with valves that split elastically and coil
+123	coiled in spirals before they split or fall
+124	with internal partitions arranged cross-wise along the fruit
+125	with prickles
+126	with prickles on nutlets in a single row
+127	with prickles on nutlets in 2 rows
+128	rounded on the lower margin
+129	roughly triangular on the lower margin
+130	1 row of seeds in each locule
+131	>=2 rows of seeds in each locule
+132	not flattened
+133	flattened perpendicular to the commissure
+134	flattened parallel to the commissure
+135	same width and height
+136	height is greater than width
+137	smooth or without markings
+138	with hairs
+139	with tubercles of a different color or texture
+140	with parallel ridges (ribbed)
+141	no hair
+142	with a netlike pattern
+143	with short, round or cylindrical projections (papillae)
+144	with pits or depressions
+145	with glands that produce a sticky or greasy substance
+146	clear and watery
+147	milky and opaque
+148	clear
+149	not white
+150	herb
+151	small shrub
+152	vine
+153	not green
+154	fuzzy or hairy
+155	not hairy, or with very few hairs
+156	1 leaf per node (alternate)
+157	2 leaves per node (opposite)
+158	at the base of the plant (basal)
+159	>=3 leaves per node (whorled)
+160	no apparent leaves
+161	has stalk (petiole)
+162	has no stalk
+163	clasps the stem at the base
+164	goes all the way around the stem at the base
+165	heart-shaped with rounded lobes at the base (cordate)
+166	wedge-shaped with straight, converging edges at the base (cuneate), or narrow
+167	rounded at the base
+168	ends abruptly in a straight line as though cut off (truncate)
+169	arrow-shaped with pointed lobes directed backwards (sagittate)
+170	halberd-shaped with outward-pointing basal lobes (hastate)
+171	simple hairs with no glands
+172	branched hairs
+173	hairs with glands at their tips
+174	tangled or woolly-looking hairs
+175	widest near the middle and tapering at both ends (elliptic)
+176	rectangular with rounded ends (oblong)
+177	widest below the middle and broadly tapering at both ends (ovate)
+178	spoon-shaped: narrow near the base suddenly widening to a rounded tip (spatulate)
+179	roughly circular as wide as long (orbicular)
+180	heart-shaped with backward-facing rounded lobes (cordate), or arrow-shaped with backward-facing pointed lobes (sagittate)
+181	very narrow with more or less parallel sides (linear)
+182	lance-shaped; widest below the middle and tapering at both ends (lanceolate)
+183	triangular with the stalk or attachment point on one of the sides
+184	egg-shaped with the widest point above the middle (obovate)
+185	rhombic: roughly diamond-shaped
+186	lance-shaped; widest above the middle (oblanceolate)
+187	kidney-shaped; wider than long (reniform)
+188	extremely narrow, thread-like (filiform)
+189	halberd-shaped; with slightly sunken sides, and outward-pointing basal lobes (hastate)
+190	awl-shaped; narrowly tapering from the base to the tip (subulate)
+191	fan-shaped (flabellate)
+192	uniform
+193	with spots, mottlers or stripes
+194	along leaf edges
+195	at the tip of the leaf
+196	at the basal margin
+197	at the center of the leaf blade (like an umbrella), or somewhere between the edge and the center
+198	is narrow where it attaches to the stem
+199	clasps the stem or sheathes the stem
+200	outward-pointing teeth
+201	forward-pointing teeth
+202	rounded teeth
+203	lobes that radiate from the base like a hand
+204	a row of two or more lobes on each side of the central axis
+205	margin is wavy, but does not have teeth
+206	teeth which themselves have smaller teeth
+207	lobes that themselves have lobes (may be more than three levels of lobes)
+208	row of two or more lobes on each side of the central axis, and each lobe has rows of lobes on each side of its central axis
+209	one
+210	two
+211	growing only at the base of the plant
+212	three
+213	four
+214	five
+215	seven or more
+216	six
+217	no leaves
+218	have a terminal leaflet (odd number of leaflets per axis)
+219	3 well developed leaflets 
+220	5 well developed leaflets 
+221	lack a terminal leaflet (even number of leaflets per axis)
+222	straight or slanted across the top
+223	does not have tiny hairs at the tips
+224	hairy with hairs standing out at a 45 to 90 degree angle, or pressed to the stipule surface
+225	hairy with hairs directed downward
+226	some expanded and with leaf-like color and/or texture
+227	with fringe of cilia along the top edge
+228	with two lobes at their tips
+229	at least one full leaf above the base
+230	no leaves above the base
+231	palmate
+232	pinnate
+233	from a leaf or leaflet
+234	two prominent lips
+235	a concave, hood-like, upper lip
+236	the tube is curved upwards
+237	flowers are arrayed in a spiral around the inflorescence axis
+238	flowers occur singly
+239	flowers occur in several ranks
+240	nearly all flowers are arrayed on one side of the inflorescence axis
+241	two cycles
+242	one cycle
+243	no ribs or wings
+244	four ribs or wings
+245	two ribs or wings
+246	three ribs or wings
+247	five ribs or wings
+248	by three main valves, teeth or pores
+249	by two main valves, teeth or pores
+250	splits by four main valves, teeth or pores
+251	splits by five main valves, teeth or pores
+252	splits by seven main valves, teeth or pores
+253	splits by six main valves, teeth or pores
+254	tapers to a long, thin point (acuminate)
+255	bluntly pointed (obtuse)
+256	sharply pointed (acute)
+257	rounded, with no point
+258	blunt or rounded, with a notch at the tip (retuse)
+259	ends abruptly in a  straight line as though cut off (truncate)
+260	has  a very long tail-like projection ending in a point (caudate)
+261	plain, without glands or branches, and not tangled
+262	have glands
+263	are branched
+264	are tangled, matted or woolly
+265	yes, and it partially covers the fruit
+266	smooth, with no hairs or scales
+267	with rough hairs or scales
+268	points upwards
+269	angled outwards
+270	bends downwards
+271	hangs downwards
+272	hairs without glands
+273	some of the hairs have glands
+274	no hairs
+275	bell-shaped, with a tube about as long as wide, flaring at the mouth (campanulate)
+276	cup-shaped (cupuliform)
+277	urn-shaped, with a swollen tube contracted near the top, then slightly expanded in a narrow rim (urceolate)
+278	platter-shaped, the corolla flattened, circular, with nearly horizontally spreading lobes (rotate)
+279	funnel-shaped (funnelform)
+280	tube-shaped (cylindric)
+281	with a slender basal tube and  horizontally spreading mouth (salverform)
+282	gradually or does not narrow
+283	abruptly
+284	spoon-shaped: narrow near the base, then suddenly widening to a rounded tip (spatulate)
+285	rectangular but with rounded ends (oblong)
+286	lance-shaped with the widest point above the middle of the leaf blade (oblanceolate)
+287	ellipse-shaped: widest near the middle and tapering at both ends (elliptic)
+288	roughly circular, as wide as long (orbicular)
+289	extremely narrow, thread-like (linear)
+290	lance-shaped: narrow, gradually tapering from the base to the tip (lanceolate)
+291	roughly triangular
+292	with a blunt or rounded apex and a notch at the center (retuse)
+293	ends abruptly in a more or less straight line as though cut off (truncate)
+294	rounded
+295	tapers to a very narrow point (acuminate)
+296	lobed or fringed
+297	green or brown, and leaf-like in texture
+298	resemble petals in color and texture
+299	roughly circular, as wide as long
+300	rectangular, but with rounded ends (oblong)
+301	lance-shaped; narrow, gradually tapering from the base to the tip (lanceolate)
+302	egg-shaped, but with the widest point above the middle (obovate)
+303	roughly spoon-shaped; narrow near the base, suddenly widening to a rounded tip (spatulate)
+304	widest near the middle and tapering at both ends (eliiptic)
+305	awl-shaped: narrowly tapering from the base to the apex (subulate)
+306	lance-shaped, but with the widest point above the middle (oblanceolate)
+307	all about the same size
+308	one or more is much narrower or shorter than the others
+309	all approximately the same length
+310	four long stamens and two short ones (tetradynamous)
+311	two long stamens and two short ones (didynamous)
+312	like half a sphere (hemispherical)
+313	with parallel sides that do not taper, and flat across the top and bottom (cylindrical)
+314	spherical
+315	widest in the middle and tapering to each end (ellipsoid)
+316	flat or strongly compressed
+317	egg-shaped (ovoid)
+318	egg-shaped, but with the widest point above the middle (obovoid)
+319	longer than wide and with rounded ends (obloid)
+320	narrow, widest below the middle and tapering at both ends (lanceoloid)
+321	roughly shaped like a top, triangular in profile, but with a rounded end (turbinoid)
+322	roughly traingular, but with the stem at one of the points (obtriangular)
+323	roughly pear-shaped (pyriform)
+324	conical
+325	narrrow, widest above the middle and tapering at both ends (oblanceoloid)
+326	point upward or spread or curve outward
+327	curve or droop downwards
+328	extend above flowers and buds
+329	extend below flowers and buds
+330	green, with a leaf-like texture
+331	thin, dry and papery, possibly with a narrow green stripe at the center
+332	have a hard and bony or firm and leathery texture
+333	symmetrical
+334	flat (planar) at the edges
+335	the edges are curled under
+336	the edges are curled up
+337	the major veins radiate out from one point at the base
+338	the secondary veins branch off at intervals from the primary vein
+339	leafy (herbaceous)
+340	thin and dry like paper (scarious)
+341	thin and flexible and almost translucent like a membrane (membranaceous)
+342	spongy
+343	firm, leathery (coriaceous)
+344	the major veins branch, but do not rejoin
+345	the major veins form a net-like pattern due to splitting and rejoining
+346	one main vein running from the base towards the tip
+347	three or more main veins that start at or near the leaf blade base and run from the base towards the tip
+348	flat against the leaf surface, mostly pointing towards the leaf tip
+349	standing up straight or curved in different directions
+350	curved or lying flat, mostly pointed toward the  base of the leaf
+351	is dull or slightly shiny
+352	is very shiny
+353	gradual
+354	abrupt
+355	all leaves are nearly similar in size, teeth, and length of stalks
+356	the lower leaves are larger, toothier, and/or on longer stalks than the upper leaves
+357	unpleasant
+358	pleasant
+359	point mostly upwards to outwards
+360	pressed flat against the plant, pointing towards the tip
+361	point downwards
+362	bend outwards and then downwards
+363	upright or angled outwards
+364	trail at the base, but may turn upwards at the tips
+365	solitary plant
+366	a few plants are growing together
+367	growing in tufts, or compact clusters with closely spaced stems
+368	densely matted together in clumps, cushionlike
+369	very thin but flexible, like a membrane
+370	leaf-like
+371	firm or rigid
+372	thin and dry, paperlike
+373	attached near its midpoint to the filament
+374	attached by its base to the filament
+375	one or more have a horn-like (hardened) appendage
+376	one or more have a spine at the tip
+377	one or more winged
+378	one or more have a prominent keel (a ridge that runs along the midline from base to tip)
+379	one or more have glands on their surface
+380	one or more have glands that are raised from the surface by a stalk
+381	one or more are arched and enfolding, hood-shaped
+382	notched
+383	long unbranched stem with stalked flowers growing along it (raceme)
+384	each ray of the umbel terminating in another smaller umbel (branched umbel)
+385	the inflorescence has only one flower on it
+386	with long lower branches and shorter upper branches, giving it a more or less flat-topped look (corymb)
+387	simple umbels
+388	a simple or forked spike with 2 or more verticils
+389	contracted
+390	elongate

@@ -35,22 +35,37 @@ def trim_table(header, data_rows, unique_val_rows):
 
 # Take header and data_rows
 # Replace the old attribute in header and old values in data_rows with new ones in unique_val_rows
-def replace_val(header, data_rows, unique_val_rows):
+def replace_val(header, data_rows, unique_val_rows, separator='||'):
     for row_index in range(0, len(unique_val_rows), 2):
         for attr_index in range(len(header)-4):
+            # Skip the numeric columns
             if header[attr_index] == unique_val_rows[row_index][0]:
                 header[attr_index] = unique_val_rows[row_index+1][0]  # change to header with new attribute names
                 for data_row in data_rows:
-                    for val_index in range(len(unique_val_rows[row_index])):
-                        split_vals = data_row[attr_index].split(' || ')
+                    for val_index in range(1, len(unique_val_rows[row_index])):
+                        split_vals = data_row[attr_index].split(separator)
                         for split_val_index in range(len(split_vals)):
-                            if unique_val_rows[row_index][val_index] == split_vals[split_val_index]:
-                                split_vals[split_val_index] = unique_val_rows[row_index+1][val_index]
-                        data_row[attr_index] = ' || '.join(split_vals)  # change to new value in a row
+
+                            if unique_val_rows[row_index][val_index].strip() == split_vals[split_val_index].strip():
+                                split_vals[split_val_index] = unique_val_rows[row_index+1][val_index].strip()
+                            else:
+                                split_vals[split_val_index] = split_vals[split_val_index].strip()
+
+                            if split_vals[split_val_index] == 'NA':
+                                split_vals[split_val_index] = '?'
+
+                            if 'Up to ' in split_vals[split_val_index]:
+                                split_vals[split_val_index] = split_vals[split_val_index].replace('Up to ', '<=')
+                            if ' cm' in split_vals[split_val_index]:
+                                split_vals[split_val_index] = split_vals[split_val_index].replace(' cm', '')
+                            if 'At least ' in split_vals[split_val_index]:
+                                split_vals[split_val_index] = split_vals[split_val_index].replace('At least ', '>=')
+
+                        data_row[attr_index] = separator.join(split_vals)  # change to new value in a row
 
 
 # Print out list of column ids with numeric values
-def print_numeric_col_id(header, rows, separator=' || ', interval_symbol_list=('^', '<', '>', '<=', '>=')):
+def print_numeric_col_id(header, rows, separator='||', interval_symbol_list=('^', '<', '>', '<=', '>=')):
     numeric_col_list = []
     for col_id in range(len(header)-4):
         is_col_num = False
@@ -61,7 +76,7 @@ def print_numeric_col_id(header, rows, separator=' || ', interval_symbol_list=('
                     split_interval = val.split(interval_symbol)
                     for interval_val in split_interval:
                         try:
-                            float(interval_val)
+                            float(interval_val.strip())
                             is_col_num = True
                             numeric_col_list.append(col_id)
                             break
@@ -73,7 +88,7 @@ def print_numeric_col_id(header, rows, separator=' || ', interval_symbol_list=('
                     break
             if is_col_num:
                 break
-    print('The numeric column ids: ', numeric_col_list)
+    print('The numeric column ids: ', numeric_col_list, 'Length: ', len(numeric_col_list))
 
 
 # Write table header (list) and all feature rows (list of lists) to the tsv file

@@ -63,13 +63,16 @@ def get_config_property(key):
 def leaf_label_and_depth_count(current_node, leaf_label_count_arr, depth_arr, current_depth=0):
     # Leaf
     if current_node.results and len(current_node.results) > 0:
+        if len(uniquecounts(current_node.results,current_node.class_id).keys()) > 1:
+            print(uniquecounts(current_node.results, current_node.class_id))
+        # Append the depth when reaching leaf nodes
+        depth_arr.append(current_depth)
         leaf_label_count_arr.append(len(uniquecounts(current_node.results,
                                                      current_node.class_id).keys()))
         return
 
     # Compute the depth of each sub-branch
     current_depth += 1
-    depth_arr.append(current_depth)
 
     leaf_label_and_depth_count(current_node.tb, leaf_label_count_arr, depth_arr, current_depth)
     leaf_label_and_depth_count(current_node.fb, leaf_label_count_arr, depth_arr, current_depth)
@@ -111,15 +114,20 @@ if __name__ == "__main__":
     #     [['?', "a", 5, "d", "?"], ["class2", "top class3"]]
     # ]
     # label_col_index = 1
-    #
     # print("{} observations, {} features".format(len(flower_table), NUM_COLS))
 
     print("Building tree...")
     min_gain = float(get_config_property("min_gain"))
 
-    tree = build_tree(flower_table, flower_features, label_col_index, min_gain)  # build tree
-    # print_tree(tree)
+    col_not_used = list(range(len(flower_features)))
+    tree = build_tree(flower_table, flower_features, label_col_index, min_gain, col_not_used)  # build tree
+    attribute_not_used = [flower_features[attr_index] for attr_index in col_not_used]
 
+    print('Col id not used: ', col_not_used)
+    print('Attributes not used: ', attribute_not_used)
+    print('Number of categorical attributes not used: ', len(attribute_not_used))
+
+    # print_tree(tree)
     leaf_label_count_arr = []  # a list of number of leaf labels
     depth_arr = []  # a list of branch depths
 
@@ -134,7 +142,7 @@ if __name__ == "__main__":
     print("The average depth of the tree is: ", ave_depth)
     print("The max number of labels is: ", max_leaf_lab_num)
     print("The average number of classes per leaf is: ", ave_leaf_lab_num)
-
+    exit(1)
     json_tree = {}
     construct_json(tree, json_tree)
     write_json(json_tree)

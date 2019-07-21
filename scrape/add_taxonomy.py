@@ -21,7 +21,7 @@ def generate_map(filename, filename2):
     input_f.close()
     recur(plant_json, [])
 
-    # Check if genus missing, is so add them
+    # Check if genus missing, if so add them from another source
     with open(filename2, 'r', encoding="utf-8") as csv_file:
         # creating a csv reader object
         csv_reader = csv.reader(csv_file)
@@ -67,5 +67,4 @@ def taxonomy_table(input_name, output_name):
 
 if __name__ == "__main__":
     generate_map("taxonomy2.json", "usda_taxonomy.csv")
-    print(taxonomy_map)
     taxonomy_table("flower_data.tsv", "d_flower_data.tsv")

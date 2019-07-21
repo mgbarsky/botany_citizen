@@ -40,7 +40,7 @@ def table_converter(file_path):
                     row_list.append(reader_list[triple_index][0])  # append the current species name to the row list
                     table_list.append(row_list)
                     row_list = ['?'] * len(header_list)
-
+            # For the last row
             except IndexError:
                 pass
         return header_list, table_list
