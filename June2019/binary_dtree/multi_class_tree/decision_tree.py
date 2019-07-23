@@ -1,10 +1,11 @@
 from math import log
+import copy
 import time
 MISSINGCHAR = '?'
 NUMERIC_COL_IDS = [5, 7, 9, 15, 19, 24, 25, 26, 33, 39, 40, 57, 60, 66, 77, 78, 79, 86, 89, 95, 103, 109, 115, 120, 121,
                    126, 127, 140, 143, 158, 172, 174, 175, 176, 179, 180, 182, 183, 185, 189, 190, 191, 193, 194, 195]
 
-
+ATTRIBUTE_NAMES = None
 class DecisionNode:
     def __init__(self, question=None, results=None, tb=None, fb=None):
         self.question = question  # the concatenation between the attribute and the value to split on
@@ -29,7 +30,8 @@ def uniquecounts(rows, class_col_id):
 # the different labels for the records in the same group
 def entropy(rows, class_column):
     log2 = lambda x: 0 if x == 0 else log(x)/log(2)
-    results=uniquecounts(rows,class_column)
+    results = uniquecounts(rows, class_column)
+
     # Now calculate the entropy
     ent = 0.0
     for r in results.keys():
@@ -257,11 +259,21 @@ def get_num_binary_set(rows, col_id, is_single_val, separator, interval_symbol_l
                         value_sets[1].append(restore_interval(false_interval_2[0], false_interval_2[1]))
 
         if len(value_sets[0]) != 0:
-            r[0][col_id] = separator.join(value_sets[0])
-            true_set.append(list(r))
+            r_copy = copy.deepcopy(r)
+            r_copy[0][col_id] = separator.join(value_sets[0])
+            true_set.append(r_copy)
         if len(value_sets[1]) != 0:
-            r[0][col_id] = separator.join(value_sets[1])
-            false_set.append(list(r))
+            r_copy = copy.deepcopy(r)
+            r_copy[0][col_id] = separator.join(value_sets[1])
+            false_set.append(r_copy)
+
+        # Debug for specific species
+        # if r[1][0] == 'Desmodium rotundifolium' and ATTRIBUTE_NAMES[col_id] == 'Sepal length' and dividing_number == 2.5:
+        #     print('Column id', col_id)
+        #     print('Value sets:', value_sets)
+        #     print('True set:', true_set)
+        #     print('False set:', false_set)
+        #     exit(10)
 
     return true_set, false_set
 
@@ -271,6 +283,9 @@ def divide_rows(rows, col_id, is_single_val, separator='||', interval_symbol_lis
     for row in rows:
         data = row[0]
         raw_attr_val = data[col_id]
+        if raw_attr_val == '?' or raw_attr_val in result:
+            continue
+
         attr_val_arr = process_raw_val(raw_attr_val, is_single_val, separator)
         # Iterate the or-split list (or a list with a single val)
         for attr_val in attr_val_arr:
@@ -290,9 +305,6 @@ def divide_rows(rows, col_id, is_single_val, separator='||', interval_symbol_lis
                 # If attribute value to split on is an interval
                 else:
                     symbol, interval_val = process_interval(interval_symbol_list, attr_val)
-                    if interval_val[0] > interval_val[1]:
-                        print('Major interval error: ', interval_val)
-                        exit(-2)
                     true_set, false_set = get_num_binary_set(rows, col_id, is_single_val, separator, interval_symbol_list,
                                                              dividing_symbol=symbol, dividing_interval_val=interval_val)
 
@@ -300,21 +312,23 @@ def divide_rows(rows, col_id, is_single_val, separator='||', interval_symbol_lis
             else:
                 for r in rows:
                     val_arr = process_raw_val(r[0][col_id], is_single_val, separator)
-
                     # Divide the rows into two sets
                     if attr_val in val_arr:
-                        r[0][col_id] = attr_val
-                        true_set.append(r)
+                        r_copy = copy.deepcopy(r)
+                        r_copy[0][col_id] = attr_val
+                        true_set.append(r_copy)
 
                         # Divide the other non-belonging or separated values into the false set
                         if len(val_arr) > 1:
                             val_arr.remove(attr_val)
-                            r[0][col_id] = separator.join(val_arr)
-                            false_set.append(r)
+                            r_copy = copy.deepcopy(r)
+                            r_copy[0][col_id] = separator.join(val_arr)
+                            false_set.append(r_copy)
 
                     # For single-valued false set
                     else:
-                        false_set.append(r)
+                        r_copy = copy.deepcopy(r)
+                        false_set.append(r_copy)
 
             result[attr_val].append(true_set)
             result[attr_val].append(false_set)
@@ -332,7 +346,6 @@ def total_entropy_of_split(row_sets, class_label_col, scoref=entropy):
         w = len(val_list) / total_row_len
         ent = scoref(val_list, class_label_col)
         total_ent += w * ent
-
     return total_ent
 
 
@@ -359,6 +372,7 @@ def intrinsic_info(row_sets):
 # or nominal values
 def build_tree(rows, flower_features, class_label_col, min_gain, col_not_used, is_single_val=False
                , scoref=entropy, total_score_func=total_entropy_of_split):
+
     decision_node = DecisionNode()
     decision_node.results = rows
     decision_node.class_id = class_label_col
@@ -375,24 +389,30 @@ def build_tree(rows, flower_features, class_label_col, min_gain, col_not_used, i
     # Find the best col
     for col_id in range(column_count):
         # print("len rows", len(rows))
+        # if col_id in NUMERIC_COL_IDS:
+        #     continue
+
+        # print('\nAttribute to split:', flower_features[col_id])
         sets = divide_rows(rows, col_id, is_single_val)
-        # print(len(sets.values()))
+        # elapsed_time = time.time() - start_time
+        # print(elapsed_time, 'Seconds')
+        # print('Number of sets:', len(sets))
+
         current_val = None
         score = None
-        # for val_key, row_sets in sets.items():
-        #     sets_score = total_score_func(row_sets, class_label_col)
-        #     if score is None or sets_score < score:
-        #         score = sets_score
-        #         current_val = val_key
-        #
-        # # Total entropy
-        # if score is not None and score < current_score:
-        #     current_score = score
-        #     best_column = col_id
-        #     best_val_key = current_val
-    exit(2)
-    gain = parent_score - current_score
+        for val_key, row_sets in sets.items():
+            sets_score = total_score_func(row_sets, class_label_col)
+            if score is None or sets_score < score:
+                score = sets_score
+                current_val = val_key
 
+        # Total entropy
+        if score is not None and score < current_score:
+            current_score = score
+            best_column = col_id
+            best_val_key = current_val
+
+    gain = parent_score - current_score
     if gain < min_gain:  # to set up min gain
         # for row in rows:
         #     print(row)
@@ -412,6 +432,7 @@ def build_tree(rows, flower_features, class_label_col, min_gain, col_not_used, i
 
     decision_node.results = []  # Empty the result list when it's not a leaf node
     decision_node.question = flower_features[best_column] + '({})'.format(best_val_key)
+
     for col_index in range(len(col_not_used)):
         if best_column == col_not_used[col_index]:
             del col_not_used[col_index]
@@ -420,6 +441,7 @@ def build_tree(rows, flower_features, class_label_col, min_gain, col_not_used, i
     # Get the best row sets with binary split
     best_sets = divide_rows(rows, best_column, is_single_val)[best_val_key]
 
+    print('Length of true set: {}, Length of false set: {}'.format(len(best_sets[0]), len(best_sets[1])))
     # Attach the true branch and false branch to the current node
     decision_node.tb = \
         build_tree(best_sets[0], flower_features,  decision_node.class_id, min_gain, col_not_used, is_single_val,
