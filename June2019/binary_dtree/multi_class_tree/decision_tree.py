@@ -259,11 +259,11 @@ def get_num_binary_set(rows, col_id, is_single_val, separator, interval_symbol_l
                         value_sets[1].append(restore_interval(false_interval_2[0], false_interval_2[1]))
 
         if len(value_sets[0]) != 0:
-            r_copy = copy.deepcopy(r)
+            r_copy = [list(r[0]), list(r[1])]
             r_copy[0][col_id] = separator.join(value_sets[0])
             true_set.append(r_copy)
         if len(value_sets[1]) != 0:
-            r_copy = copy.deepcopy(r)
+            r_copy = [list(r[0]), list(r[1])]
             r_copy[0][col_id] = separator.join(value_sets[1])
             false_set.append(r_copy)
 
@@ -283,9 +283,6 @@ def divide_rows(rows, col_id, is_single_val, separator='||', interval_symbol_lis
     for row in rows:
         data = row[0]
         raw_attr_val = data[col_id]
-        if raw_attr_val == '?' or raw_attr_val in result:
-            continue
-
         attr_val_arr = process_raw_val(raw_attr_val, is_single_val, separator)
         # Iterate the or-split list (or a list with a single val)
         for attr_val in attr_val_arr:
@@ -314,20 +311,20 @@ def divide_rows(rows, col_id, is_single_val, separator='||', interval_symbol_lis
                     val_arr = process_raw_val(r[0][col_id], is_single_val, separator)
                     # Divide the rows into two sets
                     if attr_val in val_arr:
-                        r_copy = copy.deepcopy(r)
+                        r_copy = [list(r[0]), list(r[1])]
                         r_copy[0][col_id] = attr_val
                         true_set.append(r_copy)
 
                         # Divide the other non-belonging or separated values into the false set
                         if len(val_arr) > 1:
                             val_arr.remove(attr_val)
-                            r_copy = copy.deepcopy(r)
+                            r_copy = [list(r[0]), list(r[1])]
                             r_copy[0][col_id] = separator.join(val_arr)
                             false_set.append(r_copy)
 
                     # For single-valued false set
                     else:
-                        r_copy = copy.deepcopy(r)
+                        r_copy = [list(r[0]), list(r[1])]
                         false_set.append(r_copy)
 
             result[attr_val].append(true_set)
@@ -388,10 +385,6 @@ def build_tree(rows, flower_features, class_label_col, min_gain, col_not_used, i
 
     # Find the best col
     for col_id in range(column_count):
-        # print("len rows", len(rows))
-        # if col_id in NUMERIC_COL_IDS:
-        #     continue
-
         # print('\nAttribute to split:', flower_features[col_id])
         sets = divide_rows(rows, col_id, is_single_val)
         # elapsed_time = time.time() - start_time
@@ -441,7 +434,6 @@ def build_tree(rows, flower_features, class_label_col, min_gain, col_not_used, i
     # Get the best row sets with binary split
     best_sets = divide_rows(rows, best_column, is_single_val)[best_val_key]
 
-    print('Length of true set: {}, Length of false set: {}'.format(len(best_sets[0]), len(best_sets[1])))
     # Attach the true branch and false branch to the current node
     decision_node.tb = \
         build_tree(best_sets[0], flower_features,  decision_node.class_id, min_gain, col_not_used, is_single_val,

@@ -1,5 +1,6 @@
 from decision_tree import *
 import json
+import time
 import itertools
 
 NUM_COLS = 0  # Number of columns in the dataset
@@ -120,14 +121,20 @@ if __name__ == "__main__":
     min_gain = float(get_config_property("min_gain"))
 
     col_not_used = list(range(len(flower_features)))
+
+    start_time = time.time()
     tree = build_tree(flower_table, flower_features, label_col_index, min_gain, col_not_used)  # build tree
+    elapsed_time = time.time() - start_time
+    print('Time used to build the tree {} seconds'.format(round(elapsed_time)))
+
     attribute_not_used = [flower_features[attr_index] for attr_index in col_not_used]
 
     print('Col id not used: ', col_not_used)
     print('Attributes not used: ', attribute_not_used)
-    print('Number of categorical attributes not used: ', len(attribute_not_used))
+    print('Number of attributes not used: ', len(attribute_not_used))
 
     # print_tree(tree)
+
     leaf_label_count_arr = []  # a list of number of leaf labels
     depth_arr = []  # a list of branch depths
 
@@ -142,7 +149,6 @@ if __name__ == "__main__":
     print("The average depth of the tree is: ", ave_depth)
     print("The max number of labels is: ", max_leaf_lab_num)
     print("The average number of classes per leaf is: ", ave_leaf_lab_num)
-    exit(1)
     json_tree = {}
     construct_json(tree, json_tree)
     write_json(json_tree)
