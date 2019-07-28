@@ -11,6 +11,10 @@ if __name__ == "__main__":
     print('clusters by tanimoto coefficient')
     clusters.drawdendrogram(clust,docs,jpeg='groceries_tanimoto.jpg')
 
+    clust = clusters.hcluster(data, distance=clusters.cosine)
+    print('clusters by cosine similarity')
+    clusters.drawdendrogram(clust,docs,jpeg='groceries_cosine.jpg')
+
     clust=clusters.hcluster(data,distance=clusters.euclidean)
     print('clusters by euclidean distance')
     clusters.drawdendrogram(clust,docs,jpeg='groceries_euclidean.jpg')
