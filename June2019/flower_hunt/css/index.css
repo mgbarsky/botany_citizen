@@ -1,0 +1,354 @@
+body {
+  font-family: Tahoma, Geneva, sans-serif;
+  font-size: 1.45em;
+  background: #e1e2e1;
+  margin: 0;
+}
+
+/*To style the big container for all nav and footer frames*/
+nav,
+footer {
+  transition: left 0.4s;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  z-index: 100;
+  left: 0;
+}
+
+/*To sytle nav and footer differently*/
+nav {
+  top: 0;
+  background-color: #005005;
+  user-select: none;
+}
+footer {
+  bottom: 0;
+  padding-bottom: 5px;
+}
+
+/*Style each frame by giving them a 100vw*/
+nav > h1,
+footer > div {
+  height: 62px;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+footer > div {
+  height: 100px;
+  flex-direction: column;
+}
+
+/* To make the height of the footer div smaller in order to display more results if any */
+footer > div:nth-child(4) {
+  height: 50px;
+}
+footer > div:nth-child(4) > label {
+  position: fixed;
+  bottom: 0;
+}
+
+/*To make canvas, choose button, and video container centered and in proper size*/
+main {
+  top: 62px;
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - 230px);
+  z-index: 0;
+}
+main,
+main > div {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* To style the big question container */
+main > div:nth-child(4) {
+  justify-content: space-between;
+  width: 50vw;
+  height: 90%;
+  background: #fcfefc;
+  border: 1.5px solid rgba(0, 80, 5, 0.5);
+  border-radius: 5px;
+}
+/* To style the container for the question itself */
+main > div:nth-child(4) > p {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100px;
+  border-bottom: 1px solid rgba(0, 80, 5, 0.5);
+  padding: 8px 0 8px 0;
+  color: black;
+  font-size: 0.75em;
+  text-align: center;
+  margin: 0 3px 0 3px;
+}
+/* Reduce the height of the question img*/
+main > div:nth-child(4) > img {
+  max-height: calc(100% - 155px);
+}
+/* Restyle the button in the question container */
+main > div:nth-child(4) > p > label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(38, 50, 56, 0.91);
+  font-size: 1.3em;
+  font-weight: bold;
+  height: 100%;
+  width: fit-content;
+  margin: 0 0 0 3px;
+}
+main > div:nth-child(4) > p > label:first-child {
+  margin: 0 3px 0 0;
+}
+#question {
+  display: flex;
+  justify-content: center;
+  width: 101%;
+}
+#q_pre,
+#q_next {
+  display: none;
+}
+
+/* To style the result container */
+main > div:nth-child(5) {
+  height: calc(100vh - 160px);
+  justify-content: flex-start;
+}
+/* Add user image as background */
+main > div:nth-child(5) > div:first-child {
+  background-image: url('../image/flower/user_img.jpg');
+  background-color: #cccccc;
+  width: 50vw;
+  height: 35vh;
+  min-height: 35vh;
+  margin-bottom: 5px;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+/* To style the outter container of result cards*/
+main > div:nth-child(5) > div:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: auto;
+  width: 50vw;
+}
+/* To style the inner container of flower info */
+.info_box {
+  font-size: 1em;
+  display: flex;
+  justify-content: space-between;
+  -webkit-box-shadow: 0px 1px 8px -1px #1c1c1c;
+  box-shadow: 0px 1px 8px -1px #1c1c1c;
+  background: #f5f5f6;
+  width: 47vw;
+  height: 180px;
+  min-height: 180px;
+  margin: 5px 0 8px 0;
+  padding: 8px;
+}
+.info_box > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 50%;
+}
+.info_box label {
+  width: 180px;
+  max-width: 85%;
+  margin: 0;
+  background: none;
+  border: 2px solid #60ac5d;
+  color: #60ac5d;
+  border-radius: 15px;
+  padding: 0.2ex;
+}
+.info_box > img {
+  max-width: 40%;
+  object-fit: cover;
+}
+
+/*Make video and image remains proportions*/
+video,
+img {
+  max-width: 100%;
+  max-height: 100%;
+  -webkit-user-drag: none;
+  height: auto;
+  user-select: none;
+}
+video {
+  width: 50vw;
+  height: calc(100vh - 180px);
+}
+
+#input_button_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+/*To make the video as large as possible*/
+
+/*For changing states (frames) of nav and footer*/
+main.ChooseInputFrame nav,
+main.ChooseInputFrame footer {
+  left: 0;
+}
+
+main.TakePicFrame nav,
+main.TakePicFrame footer {
+  left: -100vw;
+}
+
+main.QuestionFrame nav,
+main.QuestionFrame footer {
+  left: -200vw;
+}
+
+main.ResultFrame nav,
+main.ResultFrame footer {
+  left: -300vw;
+}
+
+/*To style labels to be clicked as button*/
+label {
+  cursor: pointer;
+  background: #2e7c31;
+  color: rgba(255, 255, 255, 0.99);
+  text-align: center;
+  padding: 0.5ex;
+  border: none;
+  border-radius: 3px;
+  user-select: none;
+  margin-bottom: 15px;
+  width: 122px;
+}
+.swal-button,
+.swal-button:active,
+.swal-button:hover,
+.swal-button:not([disabled]):hover {
+  background: #2e7c31;
+}
+
+/*To create the clicked effects*/
+label:active {
+  position: relative;
+  bottom: -1px;
+}
+
+/*To add margin to select and style the label differently*/
+select {
+  margin-bottom: 1ex;
+  font-size: 0.7em;
+}
+.select label {
+  background: none;
+  color: black;
+  font-size: 0.7em;
+}
+/*Hide the file input to style it differently with a label*/
+.image-upload > input {
+  display: none;
+}
+
+/*To style the previous icon*/
+a {
+  cursor: pointer;
+  color: white;
+  text-decoration: none;
+  display: inline-block;
+  padding: 8px 16px;
+  margin-left: 2px;
+}
+a:hover {
+  color: grey;
+}
+
+/*To style the title*/
+h1 {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.99);
+  font-weight: 400;
+  margin: 0;
+}
+
+/*For hiding containers at begining*/
+#video_container,
+#question_container,
+#result_container {
+  display: none;
+}
+
+/*To make the copy right font size small*/
+footer > div > p {
+  padding-top: 15px;
+  font-size: 12px;
+  user-select: none;
+}
+
+/* The style for table in questio container*/
+table {
+  text-align: center;
+  font-size: 0.5em;
+  width: 100%;
+  border-color: rgba(0, 80, 5, 0.5);
+  border-style: solid;
+  border-collapse: collapse;
+  border-width: 1px 0 0 0;
+}
+table th {
+  border-width: 0;
+  font-weight: 500;
+}
+
+table td {
+  opacity: 0.3;
+  border-width: 0;
+}
+table td:first-child,
+table td:nth-child(2),
+table td:nth-child(3),
+table th:first-child,
+table th:nth-child(2),
+table th:nth-child(3) {
+  border-width: 0 0.5px 0 0;
+}
+
+@media only screen and (max-width: 1000px) {
+  /* To style the img background container of the result*/
+  main > div:nth-child(5) > div:first-child {
+    height: 25vh;
+    width: 100vw;
+  }
+  /* Make the container of result cards same width with background */
+  main > div:nth-child(5) > div:nth-child(2) {
+    width: 100vw;
+  }
+  /* To style the question container */
+  main > div:nth-child(4),
+  video {
+    width: 97vw;
+  }
+
+  /* To style the inner container of flower info */
+  .info_box {
+    font-size: 0.75em;
+    height: 140px;
+    min-height: 140px;
+    width: 89vw;
+  }
+  .info_box > div {
+    margin: 0 10px 0 10px;
+  }
+}
