@@ -1,0 +1,385 @@
+-1	?	NA
+1	terrestrial	Is the 
+2	wetlands	Is the
+3	aquatic	Is the
+4	blue to purple	Is 
+5	white	Is 
+6	yellow	Is 
+7	orange	Is 
+8	pink to red	Is 
+9	green to brown	Is 
+10	simple	Is 
+11	compound	Is 
+12	lobes	Is 
+13	teeth and lobes	Are 
+14	teeth	Is 
+15	entire(no teeth and lobes)	Is 
+16	radially symmetrical	Is 
+17	bilaterally symmetrical	Is
+18	asymmetrical	Is
+19	not fused	Is
+20	fused into a cup or tube	Is
+21	dry and splits open	Is
+22	dry but does not split open	Is
+23	fleshy	Is
+24		Is there no
+25		Is there
+26	fused	Are
+27	solitary	Are
+28		Are there some
+29	the flower has superior ovary and no hypanthium	Is the
+30	the flower has inferior ovary, with or without hypanthium	Is the
+31	the flower has superior ovary and hypanthium	Is the
+32	contain both pollen and seed producing parts	Do
+33	cintain only pollen- or only seed-producing parts	Do
+34	branched above the base	Is the
+35	have two or more completely separate styles	Does the
+36	narrow at the tip and unbranched	Is the
+37	lobed at the tip, and unbranched	Is the
+38	knob-like at the tip, and unbranched	Is the
+39	unbranched, but has two or more narrow appendages	Is the
+40	1 tepal has tubercle	Is the description of
+41	2-3 tepals have tubercles	Is the description of
+42	no tubercles	Is the description of
+43	have teeth or spines	Does the
+44	tubercle extends to over 1/3 of the flower	Is the description of
+45	tubercle  extends below the base of tepal	Is the description of
+46	spoted or (only striped)	Are 
+47		Are there no
+48	above the point of petal attachment	Is the
+49	below the point of petal attachment	Is the
+50	thin, delicate, pigmented	Is the
+51	green and/or leefy in texture	Is the
+52	Are side petals with narrow hairs	
+53	Are spurred petals hairless	
+54	Are side petals with knob-shaped hairs	
+55	Are spurred petals hairy	
+56	Are side petals hairless	
+57	Are petals longer than sepals	
+58	Are petals about same size as sepals	
+59	Are petals shorter than sepals	
+60	straihgt or slunt outwards (for fresh flowers only)		Are
+61	curled inwards (for fresh flowers only)		Are
+62	of flower synoecious (all flowers have carpels and stamens)	Is the
+63	of flower monoecious (each flower has either carpel or stamen, but both types on the same plant)	Is the 
+64	of flower dioecious (all the flowers of the same plant have either carpel or stamen)	Is the 
+65	of the flower polygamous (flowers with both carpels and stamens, with only carpels or stamens, all in the same plant)	Is the 
+66	different	Are 
+67	similar	Are
+68	Is the stamen attached at the bases of petals	
+69	Is the stamen attached to petals	
+70	Is stamen lined up with sepals	
+71	Is stamen lined up with petals	
+72	Is stamen at the tip of the style	
+73	Is stamen on the inner surface of the style	
+74	Is stamen in lines on the ovary	
+75	Are all the flowers have both carpels and stamens	
+76	Are some or all the flowers have stamens only	
+77	with 2 lobes	Are the
+78	with 1 lobe	Are the
+79	perpendicular to the plane of the perianth (vertical)	Is the
+80	parallel to the plane of the perianth (horizontal)	Is the
+81	circular	Is the
+82	oval	Is the
+83	with tiny rounded bumps or projections (papillose)	Is the
+84	with tiny rounded bumps or projections plus parallel lines or ridges (striate-papillose)	Is the
+85	smooth	Is the
+86	with irregular bumps (rough)	Is the
+87	with fine-grained irregularities (slightly rough)	Is the
+88	dry, indehiscent, and usually one-seeded fruit (achene)	Is the description of
+89	pericarp is loosely attached and often readily removed (utricle)	Is the description of
+90	red	Is the
+91	purple	Is the
+92	green	Is the
+93	brown	Is the
+94	blue	Is the
+95	entirely green	Is the
+96	spotted or tinted with red to purple-brown	Is the
+97	splits on or near the middle	Does the
+98	bursts open or shatters without a clear seam	Does the
+99	splits below the middle	Does the
+100	splits above the middle	Does the
+101	Is the fruit surface wrinkled (reticulate), or covered with bumps (tuberculate)	
+102	Is the fruit with elongate beak at the tip that does not split open	
+103	Does fruit NOT split open at maturity (indehiscent)	
+104	Does the fruit splits along seams to release seeds (capsule)	
+105	Does the fruit splits into sections with one or more seeds each (schizocarp)	
+106	Does one ovary splits along one side to release the seeds (follicle)	
+107	Is the fruit fleshy with the wall enclosing sections each  with two or more seeds (berry)	
+108	Is the fruit dry usually one-seeded does not split open (achene)	
+109	Is the fruit elongated height/width  3 and dehisces by two valves leaving  persistent replum to which seeds are attached (silique)	
+110	Is the fruit elongated but height/width less than  3 (silicle)	
+111	Does the fruit split around the middle and the top falls off exposing the (pyxis)	
+112	Does the fruit split into two valves, but has a single carpel like a pea pod (legume)	
+113	Is the fruit fleshy, with  firm inner ovary wall that encloses a single seed (drupe)	
+114	Is the fruit dry and indehiscent, with a hard wall, usually containing only one seed (nut)	
+115	Is the fruit composed of multiple fused ovaries from one flower (aggregate)	
+116	with valves that split elastically and coil	Are
+117	coiled in spirals before they split or fall	Are
+118	with internal partitions arranged cross-wise along the fruit	Are
+119	with prickles	Are
+120	rounded on the lower margin	Is
+121	roughly triangular on the lower margin	Is
+122	Is there only 1 row of seeds in each locule	
+123	Are there more than 2 rows of seeds in each locule	
+124	not flattened	Is the
+125	flattened perpendicular to the commissure	Is the
+126	flattened parallel to the commissure	Is the
+127	Is seed same width and height	
+128	Is seed height is greater than width	
+129	smooth or without markings	Is
+130	with hairs	Is the
+131	with tubercles of a different color or texture	Is the
+132	with parallel ridges (ribbed)	Is the
+133	have no hair	Does
+134	with a netlike pattern	Is the
+135	with short, round or cylindrical projections (papillae)	Is the
+136	with pits or depressions	Is the
+137	with glands that produce a sticky or greasy substance	Is the
+138	Are all prickles on nutlets in only a single row if any	
+139	Are all prickles on nutlets in 2 rows if any	
+140	clear and watery	Is the
+141	milky and opaque	Is the
+142	clear	Is the
+143	NOT white	Is the
+144	herb (with self-supporting stems)	 Is the
+145	small shrub	Is the
+146	vine	Is the
+147	NOT green	Is
+148	fuzzy or hairy	Are
+149	not hairy, or with very few hairs	Are
+150	1 leaf per node (alternate)	Is the
+151	2 leaves per node (opposite)	Is the
+152	at the base of the plant (basal)	Is the
+153	more than 3 leaves per node (whorled)	Is the
+154	Are there NO apparent leaves	
+155	has stalk (petiole)	Does the
+156	has NO stalk	Does the
+157	clasps the stem at the base	Does the
+158	goes all the way around the stem at the base	Does the
+159	heart-shaped with rounded lobes at the base (cordate)	Is the
+160	wedge-shaped with straight, converging edges at the base (cuneate), or narrow	Is the
+161	rounded at the base	Is the
+162	end abruptly in a straight line as though cut off (truncate)	Does the
+163	arrow-shaped with pointed lobes directed backwards (sagittate)	Is the
+164	halberd-shaped with outward-pointing basal lobes (hastate)	Is the
+165	Dose the leaf blade have simple hairs with no glands	
+166	Dose the leaf blade have branched hairs	
+167	Dose the leaf blade have hairs with glands at their tips	
+168	Dose the leaf blade have tangled or woolly-looking hairs	
+169	widest near the middle and tapering at both ends (elliptic)	Is the
+170	rectangular with rounded ends (oblong)	Is the
+171	widest below the middle and broadly tapering at both ends (ovate)	Is the
+172	Is the leaf blade spoon-shaped (narrow near the base suddenly widening to a rounded tip (spatulate))	
+173	roughly circular as wide as long (orbicular)	Is the
+174	Is the leaf blade heart-shaped with backward-facing rounded lobes (cordate), or arrow-shaped with backward-facing pointed lobes (sagittate)	
+175	Is the leaf blade very narrow with more or less parallel sides (linear)	
+176	Is the leaf blade lance-shaped; widest below the middle and tapering at both ends (lanceolate)	
+177	triangular with the stalk or attachment point on one of the sides	Is the
+178	Is the leaf blade egg-shaped with the widest point above the middle (obovate)	
+179	rhombic (roughly diamond-shaped)	Is the
+180	Is the leaf blade lance-shaped; widest above the middle (oblanceolate)	
+181	Is the leaf blade kidney-shaped; wider than long (reniform)	
+182	Is the leaf blad extremely narrow, thread-like (filiform)	
+183	Is the leaf blad halberd-shaped; with slightly sunken sides, and outward-pointing basal lobes (hastate)	
+184	Is the leaf blad  awl-shaped; narrowly tapering from the base to the tip (subulate)	
+185	Is the leaf blad fan-shaped (flabellate)	
+186	uniform	Is the
+187	with spots, mottlers or stripes	Is the
+188	along leaf edges	Are the
+189	at the tip of the leaf	Are the
+190	at the basal margin	Are the
+191	at the center of the leaf blade (like an umbrella), or somewhere between the edge and the center	Are the
+192	narrow where it attaches to the stem	Is the
+193	clasp the stem or sheathes the stem	Does the
+194	Do you see outward-pointing teeth	
+195	Do you see forward-pointing teeth	
+196	Do you see rounded teeth	
+197	Do you see lobes that radiate from the base like a hand	
+198	Do you see a row of two or more lobes on each side of the central axis	
+199	Is lobe margin wavy, but does not have teeth	
+200	Do you see teeth which themselves have smaller teeth	
+201	Do lobes that themselves have lobes (may be more than three levels of lobes) if any	
+202	Do you see row of two or more lobes on each side of the central axis, and each lobe has rows of lobes on each side of its central axis	
+203	one	Are
+204	two	Are 
+205	growing only at the base of the plant	Are
+206	three	Are
+207	four	Are
+208	five	Are
+209	seven or more	Are
+210	six	Are
+211	Are there NO leaves	
+212	have a terminal leaflet (odd number of leaflets per axis)	Do
+213	lack a terminal leaflet (even number of leaflets per axis)	Do
+214	Is stipule straight or slanted across the top	
+215	Does stipules NOT have tiny hairs at the tips	
+216	Is stipule hairy with hairs standing out at a 45 to 90 degree angle, or pressed to the stipule surface	
+217	Is stipule hairy with hairs directed downward	
+218	Are some stipules expanded and with leaf-like color and/or texture	
+219	Are stipules with fringe of cilia along the top edge	
+220	Are stipules with two lobes at their tips	
+221	Is there at least one full leaf above the base	
+222	Is there NO leaves above the base at all	
+223	from a leaf or leaflet	Is the
+224	Do corolla have two prominent lips	
+225	Do corolla have a concave, hood-like, upper lip	
+226	Is the corolla tube curved upwards	
+227	 Are flowers arrayed in a spiral around the inflorescence axis	
+228	 Are flowers occur singly	
+229	Do flowers occur in several ranks	
+230	Are nearly all flowers arrayed on one side of the inflorescence axis	
+231	two cycles	Is the
+232	one cycle	Is the
+233	Are there NO ribs or wings ar all	
+234	Are there four ribs or wings	
+235	Are there two ribs or wings	
+236	Are there three ribs or wings	
+237	Are there five ribs or wings	
+238	by three main valves, teeth or pores	Are
+239	by two main valves, teeth or pores	Are
+240	by four main valves, teeth or pores	Are
+241	circumscissile toward base	Are
+242	splits by five main valves, teeth or pores	Are
+243	splits by seven main valves, teeth or pores	Are
+244	splits by six main valves, teeth or pores	Are
+245	tapers to a long, thin point (acuminate)	Is the
+246	bluntly pointed (obtuse)	Is the
+247	sharply pointed (acute)	Is the
+248	rounded, with no point	Is the
+249	blunt or rounded, with a notch at the tip (retuse)	Is the
+250	end abruptly in a  straight line as though cut off (truncate)	Does the
+251	have  a very long tail-like projection ending in a point (caudate)	Does the
+252	plain, without glands or branches, and not tangled	Are
+253	have glands	Do
+254	branched	Are
+255	tangled, matted or woolly	Are
+256	(partially covers the fruit)	Is there
+257	smooth, with no hairs or scales	Is the
+258	with rough hairs or scales	Is the
+259	Do the flower points upwards	
+260	Is the flower angled outwards	
+261	Do the flower bend downwards	
+262	Do the flower hang downwards	
+263	without glands	Are
+264	have glands	Are some
+265	Are there NO hairs on inflorescence axis	
+266	Is perianth bell-shaped, with a tube about as long as wide, flaring at the mouth (campanulate)	
+267	Is perianth cup-shaped (cupuliform)	
+268	Is perianth urn-shaped, with a swollen tube contracted near the top, then slightly expanded in a narrow rim (urceolate)	
+269	Is perianth platter-shaped, the corolla flattened, circular, with nearly horizontally spreading lobes (rotate)	
+270	Is perianth funnel-shaped (funnelform)	
+271	Is perianth tube-shaped (cylindric)	
+272	Is perianth with a slender basal tube and  horizontally spreading mouth (salverform)	
+273	Do petal gradually or does not narrow	
+274	abruptly	Does
+275	spoon-shaped (narrow near the base, then suddenly widening to a rounded tip (spatulate))	Is
+276	rectangular but with rounded ends (oblong)	Is
+277	lance-shaped with the widest point above the middle of the leaf blade (oblanceolate)	Is
+278	ellipse-shaped: widest near the middle and tapering at both ends (elliptic)	Is
+279	roughly circular, as wide as long (orbicular)	Is
+280	Is sepal extremely narrow, thread-like (linear)	
+281	lance-shaped (narrow, gradually tapering from the base to the tip (lanceolate))	Is
+282	roughly triangular	Is
+283	Is the petal tip with a blunt or rounded apex and a notch at the center (retuse)	
+284	Dose the petal tip end abruptly in a more or less straight line as though cut off (truncate)	
+285	rounded	Is
+286	Does sepal tip tapers to a very narrow point (acuminate)	
+287	lobed or fringed	Are
+288	Is sepal green or brown, and leaf-like in texture	
+289	Do sepals resemble petals in color and texture	
+290	roughly circular, as wide as long	Is
+291	rectangular, but with rounded ends (oblong)	Is
+292	Is sepal lance-shaped; narrow, gradually tapering from the base to the tip (lanceolate)	
+293	Is sepal egg-shaped, but with the widest point above the middle (obovate)	
+294	Is sepal roughly spoon-shaped; narrow near the base, suddenly widening to a rounded tip (spatulate)	
+295	Is sepal widest near the middle and tapering at both ends (eliiptic)	
+296	Is sepal awl-shaped (narrowly tapering from the base to the apex (subulate))	
+297	Is sepal lance-shaped, but with the widest point above the middle (oblanceolate)	
+298	Are sepals all about the same size	
+299	Is one or more sepals much narrower or shorter than the others	
+300	Are stamens all approximately the same length	
+301	Are there four long stamens and two short ones (tetradynamous)	
+302	Are there two long stamens and two short ones (didynamous)	
+303	like half a sphere (hemispherical)	Is
+304	Are fruits with parallel sides that do not taper, and flat across the top and bottom (cylindrical)	
+305	spherical	Is
+306	Is fruit widest in the middle and tapering to each end (ellipsoid)	
+307	Are fruits flat or strongly compressed	
+308	Is fruit egg-shaped (ovoid)	
+309	Is fruit egg-shaped, but with the widest point above the middle (obovoid)	
+310	Is fruit longer than wide and with rounded ends (obloid)	
+311	Is fruit narrow, widest below the middle and tapering at both ends (lanceoloid)	
+312	Is fruit roughly shaped like a top, triangular in profile, but with a rounded end (turbinoid)	
+313	Is fruit roughly traingular, but with the stem at one of the points (obtriangular)	
+314	Is fruit roughly pear-shaped (pyriform)	
+315	conical	Is
+316	Is the base of the fruit notched or cordate	
+317	Is the base of fruit truncate to rounded	
+318	Is fruit narrrow, widest above the middle and tapering at both ends (oblanceoloid)	
+319	point upward or spread or curve outward	Do
+320	curve or droop downwards	Do
+321	young fruits extending well above flowers and buds	Do
+322	young fruits generally not extending above flowers and buds	Do
+323	Is floral bract green, with a leaf-like texture	
+324	Is floral bract thin, dry and papery, possibly with a narrow green stripe at the center	
+325	Do floral bract have a hard and bony or firm and leathery texture	
+326	Is leaf blade symmetrical	
+327	Is leaf blade flat (planar) at the edges	
+328	Are the edges of leaf blade curled under	
+329	Are the the edges of leaf blade are curled up	
+330	Does the major veins radiate out from one point at the base	
+331	Does the secondary veins branch off at intervals from the primary vein	
+332	leafy (herbaceous)	Is the
+333	thin and dry like paper (scarious)	Is the
+334	thin and flexible and almost translucent like a membrane (membranaceous)	Is the
+335	spongy	Is the
+336	firm, leathery (coriaceous)	Is the
+337	Does the major veins branch, but do not rejoin	
+338	Does the major veins form a net-like pattern due to splitting and rejoining	
+339	Is one main vein running from the base towards the tip	
+340	Do three or more main veins that start at or near the leaf blade base and run from the base towards the tip	
+341	Does leaf hair flat against the leaf surface, mostly pointing towards the leaf tip	
+342	Is leaf hair standing up straight or curved in different directions	
+343	Is leaf hair curved or lying flat, mostly pointed toward the  base of the leaf	
+344	dull or slightly shiny	Is
+345	very shiny	Is
+346	gradualy	Does
+347	abruptly	Does
+348	Are all leaves along the stem nearly similar in size, teeth, and length of stalks	
+349	Are the lower leaves on the stem, toothier, and/or on longer stalks than the upper leaves	
+350	unpleasant	Is the
+351	pleasant	Is the
+352	Does stem hairs point mostly upwards to outwards	
+353	Are stem hairs pressed flat against the plant, pointing towards the tip	
+354	Do stem hairs point downwards	
+355	Do plant hairs bend outwards and then downwards	
+356	Is the stem upright or angled outwards	
+357	Does the stem trail at the base, but may turn upwards at the tips	
+358	Is it a solitary plant	
+359	Are there a few plants growing together	
+360	Are stems growing in tufts, or compact clusters with closely spaced stems	
+361	Are stems densely matted together in clumps, cushionlike	
+362	very thin but flexible, like a membrane	Is the
+363	leaf-like	Is the
+364	firm or rigid	Is the
+365	thin and dry, paperlike	Is the
+366	Is the anther attached near its midpoint to the filament	
+367	Is the anther attached by its base to the filament	
+368	Do one or more sepals have a horn-like (hardened) appendage	
+369	Do one or more sepals have a spine at the tip	
+370	Are one or more sepals winged	
+371	Do one or more sepals have a prominent keel (a ridge that runs along the midline from base to tip)	
+372	Do one or more sepals have glands on their surface	
+373	Do one or more sepals have glands that are raised from the surface by a stalk	
+374	Are one or more sepals arched and enfolding, hood-shaped	
+375	notched	Is the
+376	Is the inflorescence long unbranched stem with stalked flowers growing along it (raceme)	
+377	Is each ray of the umbel terminating in another smaller umbel (branched umbel)	
+378	Does the inflorescence has only one flower on it	
+379	Is the inflorescence with long lower branches and shorter upper branches, giving it a more or less flat-topped look (corymb)	
+380	simple umbels	Is the
+381	 simple	Is the
+382	Is the inflorescence forked spike with 2 or more verticils	
+383	contracted	Is the
+384	elongate	Is the

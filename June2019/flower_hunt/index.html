@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Flower Hunt</title>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+    <meta charset="UTF-8" />
+    <script src="js/sweetalert.min.js"></script>
+    <link href="css/index.css?v=18" rel="stylesheet" type="text/css" />
+    <script src="js/take_photo.js?v=13" defer></script>
+    <script src="js/load_data.js?v=14" defer></script>
+    <script src="js/decision_maker.js?=13" defer></script>
+    <script src="js/index.js?v=23" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <main>
+      <nav>
+        <h1>
+          Hunt Nature
+        </h1>
+
+        <h1>
+          <a onclick="change_state('input')" class="previous">◀</a>
+          Select image
+        </h1>
+
+        <h1>
+          <a onclick="change_state('input')" class="previous">◀</a>
+          Question
+        </h1>
+
+        <h1>
+          <a onclick="change_state('question')" class="previous">◀</a>
+          Result
+        </h1>
+      </nav>
+
+      <div id="logo_container">
+        <img src="image/icon/logo.png" alt="logo" />
+      </div>
+
+      <div id="video_container">
+        <video autoplay></video>
+      </div>
+
+      <div id="question_container">
+        <p>
+          <label id="q_pre" onclick="ask_question('pre')"><</label>
+          <span id="question">
+            Q1: This plant is eaten as a vegetable in different places of the world?
+          </span>
+          <label id="q_next" onclick="ask_question('next')">></label>
+        </p>
+
+        <img id="q_img" onError="display_img('q_img', '')" />
+
+        <table border="1">
+          <tr>
+            <th>Order</th>
+            <th>Family</th>
+            <th>Genus</th>
+            <th>Species</th>
+          </tr>
+          <tr>
+            <td id="hiera_3">???</td>
+            <td id="hiera_2">???</td>
+            <td id="hiera_1">???</td>
+            <td id="hiera_0">???</td>
+          </tr>
+        </table>
+      </div>
+
+      <div id="result_container">
+        <div id="background_img"></div>
+
+        <div id="info_box_container">
+          <!-- <div class="info_box">
+            <img src="image/flower/hollyhock1.jpg" alt="wiki_img" />
+            <div>
+              <p class="species_name">Alcea biennis</p>
+              <label onclick="go_wiki('Alcea_biennis')">More Details</label>
+            </div>
+          </div> -->
+        </div>
+      </div>
+
+      <footer>
+        <div>
+          <div id="input_button_container">
+            <label onclick="change_state('video')">Take Photo</label>
+            <div class="image-upload">
+              <label for="file-input">Choose File</label>
+              <input id="file-input" type="file" accept=".tif,.jpg,.gif,.png,.raw,.jpeg" onchange="uploadPic()" />
+            </div>
+          </div>
+          <!-- <p>Copyright © 2019 V1 Ziyuan Li (Arthur) & Andrew Barsky </p> -->
+        </div>
+
+        <div>
+          <div class="select">
+            <label for="videoSource">Video source: </label>
+            <select id="videoSource"></select>
+          </div>
+          <label onclick="takePhoto()">Take Photo</label>
+        </div>
+
+        <div>
+          <label id="yes_button" onclick="ask_init_question('1')">
+            Yes
+          </label>
+
+          <label id="no_button" onclick="ask_init_question('0')">
+            No
+          </label>
+        </div>
+
+        <div>
+          <label onclick="change_state('input')">Play again</label>
+        </div>
+      </footer>
+    </main>
+  </body>
+</html>
