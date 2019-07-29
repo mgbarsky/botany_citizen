@@ -445,11 +445,15 @@ function divide_rows(rows, col_id, separator = '||', interval_symbol_list = ['^'
 
 function sort_obj_by_keys(unordered) {
   var ordered = {};
+
   Object.keys(unordered)
-    .sort()
+    .sort(function(a, b) {
+      return parseFloat(a.split('-')[0]) - parseFloat(b.split('-')[0]);
+    })
     .forEach(function(key) {
       ordered[key] = unordered[key];
     });
+
   return ordered;
 }
 
@@ -506,6 +510,7 @@ function find_best_questions(class_id, total_score_func = total_entropy_of_split
 
   //Key is totol entropy, value is [col_id, value_key]
   var q_obj = {};
+  var col_count = 0;
   //Find the best cols
   for (var col_id = 0; col_id < column_count; col_id++) {
     if (skip_col_arr.includes(col_id)) {
@@ -525,7 +530,6 @@ function find_best_questions(class_id, total_score_func = total_entropy_of_split
       //So you could removes this part as needed
       var skip_val = false;
       for (col_val_pair of col_val_pair_arr) {
-        console.log(col_val_pair);
         if (col_id == col_val_pair[0] && val_key == col_val_pair[1]) {
           skip_val = true;
           break;
@@ -539,17 +543,17 @@ function find_best_questions(class_id, total_score_func = total_entropy_of_split
         current_val = val_key;
       }
     }
-
+    col_count++;
     // Add to the question object to be asked
     if (score != null) {
-      q_obj[score] = [col_id, current_val];
+      q_obj[String(score) + '-' + String(col_count)] = [col_id, current_val];
     }
   }
 
   decision_array.push(sort_obj_by_keys(q_obj), 0);
   decision_arrays.push(decision_array);
 
-  console.log('Question object (sorted entropy: [col_id, value to split] ):', decision_array[2]);
+  console.log('Question object (sorted entropy-id: [col_id, value to split] ):', decision_array[2]);
 
   ask_question(-1);
 }
@@ -563,7 +567,7 @@ function get_new_class_id(min_gain, total_score_func = total_entropy_of_split) {
   var cur_q_index = decision_arrays[decisson_state_index][3];
 
   var parent_score = total_score_func([data_rows], cur_class_id);
-  var current_score = Object.keys(cur_q_objs)[cur_q_index];
+  var current_score = Object.keys(cur_q_objs)[cur_q_index].split('-')[0];
 
   var gain = parent_score - current_score;
   if (gain < min_gain) {
