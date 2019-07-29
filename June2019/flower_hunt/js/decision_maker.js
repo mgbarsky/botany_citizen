@@ -89,18 +89,23 @@ function process_raw_val(raw_attr_val, separator) {
     attr_val_arr = raw_attr_val.split(separator);
 
     for (var val_index = 0; val_index < attr_val_arr.length; val_index++) {
-      var val = parseFloat(attr_val_arr[val_index]);
+      var val = parseFloat(attr_val_arr[val_index].trim());
 
       if (!isNaN(val)) {
         attr_val_arr[val_index] = val;
+      } else {
+        attr_val_arr[val_index] = attr_val_arr[val_index].trim();
       }
     }
   }
+
   // When single val, put it into attr_val_arr
   else {
     var val = parseFloat(raw_attr_val);
     if (!isNaN(val)) {
       attr_val_arr.push(val);
+    } else {
+      attr_val_arr.push(raw_attr_val.trim());
     }
   }
   return attr_val_arr;
@@ -261,6 +266,7 @@ function get_num_binary_set(rows, col_id, separator, interval_symbol_list, divid
   for (r of rows) {
     var val_list = process_raw_val(r[0][col_id], separator);
     var value_sets = [[], []];
+
     for (val of val_list) {
       // Put missing char to the false value set
       if (val == MISSINGCHAR) {
@@ -300,19 +306,15 @@ function get_num_binary_set(rows, col_id, separator, interval_symbol_list, divid
             // print('\nInterval to be separated: {}, dividing_number:{}'.format(val_interval, dividing_number))
 
             // Divide the interval into two excluding the number used to split
+            var interval1 = null;
             if (dividing_number != val_interval[0]) {
-              var interval1 = restore_interval(val_interval[0], round(dividing_number - decrement, 2));
-            } else {
-              var interval1 = null;
+              interval1 = restore_interval(val_interval[0], round(dividing_number - decrement, 2));
             }
 
+            var interval2 = null;
             if (dividing_number != val_interval[1]) {
-              var interval2 = restore_interval(round(dividing_number + increment, 2), val_interval[1]);
-            } else {
-              var interval2 = null;
+              interval2 = restore_interval(round(dividing_number + increment, 2), val_interval[1]);
             }
-
-            // print('Separated interval1:{}, interval2:{}'.format(interval1, interval2))
 
             // Append new intervals to false value set
             if (interval1 != null) {
@@ -330,6 +332,7 @@ function get_num_binary_set(rows, col_id, separator, interval_symbol_list, divid
         // If divide the row by an interval
         else {
           var all_intervals = separate_intervals(val_interval, dividing_interval_val);
+
           var true_interval = all_intervals[0],
             false_interval_1 = all_intervals[1],
             false_interval_2 = all_intervals[2];
@@ -359,6 +362,19 @@ function get_num_binary_set(rows, col_id, separator, interval_symbol_list, divid
       var r_copy = [r[0].slice(), r[1].slice()];
       r_copy[0][col_id] = value_sets[1].join(separator);
       false_set.push(r_copy);
+    }
+
+    if (value_sets[0].length == 0 && value_sets[1].length == 0) {
+      console.log(
+        'col_id: ',
+        col_id,
+        dividing_number,
+        dividing_interval_val,
+        'raw_val: ',
+        r[0][col_id],
+        'processed_val: ',
+        val_list
+      );
     }
   }
   return [true_set, false_set];
@@ -399,16 +415,16 @@ function divide_rows(rows, col_id, separator = '||', interval_symbol_list = ['^'
         // If attribute value to split on is a number
         if (is_num(attr_val)) {
           var divided_sets = get_num_binary_set(rows, col_id, separator, interval_symbol_list, attr_val, null);
-          var true_set = divided_sets[0],
-            false_set = divided_sets[1];
+          true_set = divided_sets[0];
+          false_set = divided_sets[1];
         }
 
         // If attribute value to split on is an interval
         else {
           var interval_val = process_interval(interval_symbol_list, attr_val);
           var divided_sets = get_num_binary_set(rows, col_id, separator, interval_symbol_list, null, interval_val);
-          var true_set = divided_sets[0],
-            false_set = divided_sets[1];
+          true_set = divided_sets[0];
+          false_set = divided_sets[1];
         }
       }
 
