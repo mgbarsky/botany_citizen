@@ -178,7 +178,10 @@ def printhclust(clust,labels=None,n=0):
 # draw hierarchical clusters
 def getheight(clust):
     # Is this an endpoint? Then the height is just 1
-    if clust.left==None and clust.right==None: return 1
+    if clust.left==None and clust.right==None:
+        if isinstance(clust.id, list):
+            return len(clust.id)
+        return 1
 
     # Otherwise the height is the same of the heights of
     # each branch
@@ -187,7 +190,7 @@ def getheight(clust):
 
 def getdepth(clust):
     # The distance of an endpoint is 0.0
-    if clust.left==None and clust.right==None: return 0
+    if clust.left==None and clust.right==None: return 2
 
     # The distance of a branch is the greater of its two sides
     # plus its own distance
@@ -215,7 +218,16 @@ def drawdendrogram(clust,labels,jpeg='clusters.jpg'):
 
 
 def drawnode(draw,clust,x,y,scaling,labels):
-    if clust.id<0:
+    if isinstance(clust.id, list):
+        # Endpoint, with list of ids
+        text = ""
+        for i in range(len(clust.id)):
+            # Put 5 items per line
+            if i % 5 == 0:
+                text += '\n'
+            text += labels[clust.id[i]] + ', '
+        draw.text((x + 5, y - 7), text[1:], (0, 0, 0))
+    elif clust.id<0:
         h1=getheight(clust.left)*20
         h2=getheight(clust.right)*20
         top=y-(h1+h2)/2
