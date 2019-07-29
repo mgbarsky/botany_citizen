@@ -478,10 +478,23 @@ function get_col() {
   }
   return column_count;
 }
+//Find a array of used col-val pairs (so the same col & value pairs would not be used)
+function get_col_val_pairs(col_val_pair_arr) {
+  try {
+    for (var d_index = 0; d_index < decision_arrays.length; d_index++) {
+      var cur_q_objs = decision_arrays[d_index][2];
+      var cur_q_index = decision_arrays[d_index][3];
+      col_val_pair_arr.push(cur_q_objs[Object.keys(cur_q_objs)[cur_q_index]]);
+    }
+  } catch (e) {}
+}
 
 // Divides a set on a specific column. Can handle numeric
 // or nominal values
 function find_best_questions(class_id, total_score_func = total_entropy_of_split) {
+  var col_val_pair_arr = [];
+  get_col_val_pairs(col_val_pair_arr);
+
   //0: current rows, 1: current class_id, 2:question object sorted by total entropy, 3: the index to track which current question was asked
   var decision_array = [];
 
@@ -507,6 +520,19 @@ function find_best_questions(class_id, total_score_func = total_entropy_of_split
     var current_val = null;
     var score = null;
     for (let [val_key, row_sets] of Object.entries(sets)) {
+      //Prevent from using exactly same col & value for consecutive splits
+      //(this might be bad for the accuracy of identification but good for user experience).
+      //So you could removes this part as needed
+      var skip_val = false;
+      for (col_val_pair of col_val_pair_arr) {
+        console.log(col_val_pair);
+        if (col_id == col_val_pair[0] && val_key == col_val_pair[1]) {
+          skip_val = true;
+          break;
+        }
+      }
+      if (skip_val) continue;
+
       var sets_score = total_score_func(row_sets, class_label_col);
       if (score == null || sets_score < score) {
         score = sets_score;
@@ -536,7 +562,6 @@ function get_new_class_id(min_gain, total_score_func = total_entropy_of_split) {
   var cur_q_objs = decision_arrays[decisson_state_index][2];
   var cur_q_index = decision_arrays[decisson_state_index][3];
 
-  //Set up cur and parent score to calculate gain later
   var parent_score = total_score_func([data_rows], cur_class_id);
   var current_score = Object.keys(cur_q_objs)[cur_q_index];
 

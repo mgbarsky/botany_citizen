@@ -7,6 +7,7 @@ var attr_header = null,
   map_rows = null; //Map to convert back to textual values
 
 var skip_col_arr = []; //The array with skiped col ids
+var used_val_arr = []; //The array with used values
 var decisson_state_index = 0; //The global index to track access the array with data for pre and next questions
 
 window.onload = init();
@@ -141,6 +142,7 @@ function display_img(id, url, url_2 = '') {
 //Display the current question
 function put_question() {
   var cur_q_objs = decision_arrays[decisson_state_index][2];
+  if (!cur_q_objs || cur_q_objs.length == 0) return -1;
   var cur_q_index = decision_arrays[decisson_state_index][3];
   var col_val_pair = cur_q_objs[Object.keys(cur_q_objs)[cur_q_index]];
   var cur_attribute = attr_header[col_val_pair[0]].toLowerCase();
@@ -204,30 +206,28 @@ function end_game() {
 }
 
 //Make dicision to continue spliting based on the user's anwser, or end game and show results
+var last_anw = null;
 function make_decision(anwser) {
+  last_anw = anwser;
+  //Point global data rows to current rows
+  data_rows = decision_arrays[decisson_state_index][0];
   var new_col_id = get_new_class_id(0.0001);
+  //Get the true set of rows
+  var new_rows = get_new_rows(anwser);
 
-  //When the rows can't be split any more
-  if (new_col_id == null) {
+  //If no valid rows to split based on the anwser, end the game
+  if (new_col_id == null || new_rows.length == 0) {
     end_game();
   } else {
-    //Get the true set of rows
-    var new_rows = get_new_rows(anwser);
+    display_results();
 
-    //If no rows to split based on the anwser
-    if (new_rows.length == 0) {
-      end_game();
-    } else {
+    //Split as we can
+    if (Object.keys(uniquecounts(data_rows, 0)).length > 1) {
       //Now point the global rows to the true set of rows
       data_rows = new_rows;
-      display_results();
-
-      //Split as we can
-      if (Object.keys(uniquecounts(data_rows, 0)).length > 1) {
-        setTimeout(function() {
-          find_best_questions(new_col_id);
-        }, 500);
-      }
+      setTimeout(function() {
+        find_best_questions(new_col_id);
+      }, 500);
     }
   }
 }
@@ -235,12 +235,25 @@ function make_decision(anwser) {
 function ask_question(anwser) {
   //Called by find_best_questions function to show the best question
   if (anwser == -1) {
-    document.getElementById('yes_button').style.display = 'block';
-    document.getElementById('no_button').style.display = 'block';
     decisson_state_index = decision_arrays.length - 1;
-    put_question();
-    document.getElementById('q_next').style.display = 'flex';
-    if (decisson_state_index != 0) document.getElementById('q_pre').style.display = 'flex';
+    var q_exists = put_question();
+
+    //When no questions can be asked, end the game
+    if (q_exists == -1) {
+      end_game();
+    } else {
+      document.getElementById('yes_button').style.display = 'block';
+      document.getElementById('no_button').style.display = 'block';
+      document.getElementById('q_next').style.display = 'flex';
+      //If no next question
+      if (Object.keys(decision_arrays[decisson_state_index][2]).length < 2) {
+        document.getElementById('q_next').setAttribute('onclick', 'end_game()');
+        document.getElementById('q_next').innerHTML = 'End';
+      }
+
+      //When there is at least one pre q
+      if (decisson_state_index != 0) document.getElementById('q_pre').style.display = 'flex';
+    }
   }
 
   //True anwser
