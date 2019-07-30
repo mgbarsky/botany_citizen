@@ -1,4 +1,4 @@
-﻿frankfurter
+frankfurter
 sausage
 liver loaf
 ham
@@ -36,7 +36,7 @@ cream
 soft cheese
 sliced cheese
 hard cheese
-cream cheese 
+cream cheese
 processed cheese
 spread cheese
 curd cheese
@@ -57,7 +57,7 @@ rolls/buns
 white bread
 brown bread
 pastry
-roll products 
+roll products
 semi-finished bread
 zwieback
 potato products

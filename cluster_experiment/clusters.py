@@ -189,8 +189,8 @@ def getheight(clust):
 
 
 def getdepth(clust):
-    # The distance of an endpoint is 0.0
-    if clust.left==None and clust.right==None: return 2
+    # Extra distance at endpoints to accommodate space for lists
+    if clust.left==None and clust.right==None: return 12
 
     # The distance of a branch is the greater of its two sides
     # plus its own distance
@@ -222,11 +222,11 @@ def drawnode(draw,clust,x,y,scaling,labels):
         # Endpoint, with list of ids
         text = ""
         for i in range(len(clust.id)):
-            # Put 5 items per line
-            if i % 5 == 0:
+            # Put 3 items per line
+            if i % 3 == 0:
                 text += '\n'
             text += labels[clust.id[i]] + ', '
-        draw.text((x + 5, y - 7), text[1:], (0, 0, 0))
+        draw.text((x + 5, y - 7), text[1:-2], (0, 0, 0))
     elif clust.id<0:
         h1=getheight(clust.left)*20
         h2=getheight(clust.right)*20
@@ -343,6 +343,30 @@ def scaledown(data,distance=pearson,rate=0.01):
             loc[k][1]-=rate*grad[k][1]
 
     return loc
+
+
+def jsonify(clust, curr):
+    if clust.id >= 0:
+        curr["id"] = clust.id
+    else:
+        curr["left"] = {}
+        curr["right"] = {}
+        curr["distance"] = clust.distance
+
+        jsonify(clust.left, curr["left"])
+        jsonify(clust.right, curr["right"])
+
+
+def read_json(json_obj):
+    if "left" in json_obj:
+        left = read_json(json_obj["left"])
+        right = read_json(json_obj["right"])
+        distance = json_obj["distance"]
+
+        return bicluster(None, id=-1, left=left, right=right, distance=distance)
+    else:
+        # At a leaf
+        return bicluster(None, id=json_obj["id"])
 
 
 def draw2d(data,labels,jpeg='mds2d.jpg'):

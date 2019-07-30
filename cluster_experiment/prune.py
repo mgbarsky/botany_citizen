@@ -5,7 +5,8 @@ def find_items(clus, id_list):
     if clus is None:
         return
 
-    id_list.append(clus.id)
+    if clus.id >= 0:
+        id_list.append(clus.id)
     find_items(clus.left, id_list)
     find_items(clus.right, id_list)
 
@@ -16,7 +17,7 @@ def collapse(clus, depth, target):
 
     if depth == target:
         temp = clus.id
-        clus.id = [temp]
+        clus.id = [temp] if (temp >= 0) else []
 
         find_items(clus.left, clus.id)
         find_items(clus.right, clus.id)
