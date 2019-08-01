@@ -42,9 +42,9 @@ def write_vectors(filename, vectors, item_list):
 
 
 def main():
-    item_list = get_list("itemIndex.txt")
-    vectors = make_vectors("groceries_no_decode.txt", item_list)
-    write_vectors("grocery_vectors.txt", vectors, item_list)
+    item_list = get_list("data/itemIndex.txt")
+    vectors = make_vectors("data/groceries_no_decode.txt", item_list)
+    write_vectors("data/grocery_vectors.txt", vectors, item_list)
 
 
 if __name__ == "__main__":

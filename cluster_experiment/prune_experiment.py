@@ -99,15 +99,15 @@ def prune(clust, given_clusters, min_acc, min_coverage):
 
 
 def main():
-    given_clusters, item_hash, cluster_names = get_clusters("itemHierarchy.csv")
+    given_clusters, item_hash, cluster_names = get_clusters("data/itemHierarchy.csv")
     with open("json/{}.json".format(METRIC)) as data:
         json_obj = json.load(data)
         created_clusters = clusters.read_json(json_obj)
-    labels = make_vectors.get_list("itemIndex.txt")
+    labels = make_vectors.get_list("data/itemIndex.txt")
 
     label_nodes(created_clusters, labels, item_hash, cluster_names)
     prune(created_clusters, given_clusters, MIN_ACCURACY, 0)
-    clusters.drawdendrogram(created_clusters, labels, jpeg='{}_experiment.jpg'.format(METRIC))
+    clusters.drawdendrogram(created_clusters, labels, jpeg='img/{}_experiment.jpg'.format(METRIC))
 
 
 if __name__ == "__main__":

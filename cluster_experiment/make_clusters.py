@@ -2,11 +2,11 @@ import clusters
 import json
 
 if __name__ == "__main__":
-    docs,words,data=clusters.readfile('grocery_vectors.txt')
+    docs,words,data=clusters.readfile('data/grocery_vectors.txt')
 
     clust = clusters.hcluster(data, distance=clusters.tanimoto)
     print('clusters by tanimoto coefficient')
-    clusters.drawdendrogram(clust,docs,jpeg='groceries_tanimoto.jpg')
+    clusters.drawdendrogram(clust,docs,jpeg='img/groceries_tanimoto.jpg')
 
     json_obj = {}
     clusters.jsonify(clust, json_obj)
