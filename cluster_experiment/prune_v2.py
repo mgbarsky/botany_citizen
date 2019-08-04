@@ -73,9 +73,47 @@ def prune(current_cluster, num_clusters):
         count += 2
 
     # (For now) collapse all remaining nodes in the queue
+    list_nodes = []
     while not queue.empty():
         next_node = (queue.get())[1]
         collapse(next_node)
+        list_nodes.append(next_node)
+
+    # Save these nodes for later
+    return list_nodes
+
+
+def evaluate_cluster(node, labels, hierarchy):
+    item_counts = {}  # Cluster name: [list of items]
+
+    if isinstance(node.id, list):  # Multiple groceries at this node
+        for num in node.id:
+            item = labels[num]
+            cluster_name = hierarchy[item][0]  # The given cluster which this item belongs to
+
+            if cluster_name not in item_counts:
+                item_counts[cluster_name] = []
+            item_counts[cluster_name].append(item)
+    else:  # Single grocery at this node
+        item = labels[node.id]
+        cluster_name = hierarchy[item][0]
+
+        item_counts[cluster_name] = [item]
+
+    # Get best matching cluster
+    best_cluster = None
+    best_count = 0
+    total_count = 0
+    for cluster_name in item_counts:
+        size = len(item_counts[cluster_name])
+        total_count += size
+        if size > best_count:
+            best_count = size
+            best_cluster = cluster_name
+
+    node.item_counts = item_counts
+    node.best_cluster = best_cluster
+    node.total_count = total_count
 
 
 def main():
@@ -86,8 +124,12 @@ def main():
     labels = make_vectors.get_list("data/itemIndex.txt")
     hierarchy, level1_set, level2_set = get_hierarchy("data/itemHierarchy.csv")
 
-    prune(created_clusters, len(level1_set))  # Prune so that there are len(level1_set) nodes
-    clusters.drawdendrogram(created_clusters, labels, jpeg='img/v2_test.jpg')
+    list_nodes = prune(created_clusters, len(level1_set))  # Prune so that there are len(level1_set) nodes
+    # Evaluate which items belong to which clusters in the len(level1_set) nodes
+    for node in list_nodes:
+        evaluate_cluster(node, labels, hierarchy)
+
+    clusters.printhclust(created_clusters, labels)
 
 
 if __name__ == "__main__":

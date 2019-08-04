@@ -162,13 +162,34 @@ def printhclust(clust,labels=None,n=0):
     # indent to make a hierarchy layout
     for i in range(n):
         print (' ', end="")
-    if clust.id<0:
+    if isinstance(clust.id, int) and clust.id<0:
     # negative id means that this is branch
         print ('-')
     else:
     # positive id means that this is an endpoint
-        if labels==None: print (clust.id)
-        else: print (labels[clust.id])
+    # list of ids indicate an endpoint with multiple groceries collapsed
+        if isinstance(clust.id, list):
+            if labels==None: print([num for num in clust.id])
+            else: print([labels[num] for num in clust.id])
+        else:
+            if labels==None: print (clust.id)
+            else: print(labels[clust.id])
+
+        print(n*' ', end="")
+        print("Best cluster:", clust.best_cluster)
+
+        belong = clust.item_counts[clust.best_cluster]
+        misplaced = []
+        for cluster_name in clust.item_counts:
+            if cluster_name == clust.best_cluster:
+                continue
+            misplaced += clust.item_counts[cluster_name]
+
+        print(n*' ', end="")
+        print("Items which belong ({}):".format(len(belong)), belong)
+        print(n*' ', end="")
+        print("Items which should be somewhere else: ({})".format(len(misplaced)), misplaced)
+        print()
 
     # now print the right and left branches
     if clust.left!=None: printhclust(clust.left,labels=labels,n=n+1)
