@@ -72,7 +72,8 @@ function takePhoto() {
   imageCapture
     .takePhoto()
     .then(function(blob) {
-      document.getElementById('background_img').style.backgroundImage = 'url(' + URL.createObjectURL(blob) + ')';
+      document.getElementById('background_img_1').style.backgroundImage = 'url(' + URL.createObjectURL(blob) + ')';
+      document.getElementById('background_img_2').style.backgroundImage = 'url(' + URL.createObjectURL(blob) + ')';
       change_state('question');
     })
     .catch(function(error) {
@@ -94,7 +95,8 @@ function uploadPic() {
   img.src = url; // start convertion file to image
 
   img.onload = function() {
-    document.getElementById('background_img').style.backgroundImage = 'url(' + img.src + ')';
+    document.getElementById('background_img_1').style.backgroundImage = 'url(' + img.src + ')';
+    document.getElementById('background_img_2').style.backgroundImage = 'url(' + img.src + ')';
     change_state('question');
   };
 }

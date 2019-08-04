@@ -152,9 +152,17 @@ function put_question() {
 
   //If the current value to ask is numeric, then ask directly
   if (NUMERIC_COL_IDS.includes(col_val_pair[0])) {
-    question = 'Is ' + cur_attribute + ': ' + col_val_pair[1];
+    var value = col_val_pair[1];
     img_val_name = col_val_pair[1];
+
+    //Replace ^ with - to represent an interval
+    if (String(value).includes('^')) {
+      value = value.replace('^', '-');
+    }
+
+    question = 'Is ' + cur_attribute + ': ' + value;
   }
+
   //If the cur val is categorical, then restore it using map before asking
   else {
     var q_prefix = '';
@@ -167,6 +175,7 @@ function put_question() {
       q_end = ': ' + map_rows[col_val_pair[1]][1];
       img_val_name = map_rows[col_val_pair[1]][1];
     }
+
     question = q_prefix + cur_attribute + q_end;
   }
 

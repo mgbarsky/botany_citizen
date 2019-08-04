@@ -82,7 +82,7 @@ main > div:nth-child(4) > p {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  height: 100px;
+  height: 30%;
   border-bottom: 1px solid rgba(0, 80, 5, 0.5);
   padding: 8px 0 8px 0;
   color: black;
@@ -91,9 +91,18 @@ main > div:nth-child(4) > p {
   margin: 0 3px 0 3px;
 }
 /* Reduce the height of the question img*/
-main > div:nth-child(4) > img {
-  max-height: calc(100% - 155px);
+.q_img_container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: 45vh;
+  width: 100%;
 }
+.q_img_container > img {
+  max-height: 100%;
+  height: 100%;
+}
+
 /* Restyle the button in the question container */
 main > div:nth-child(4) > p > label {
   display: flex;
@@ -125,9 +134,9 @@ main > div:nth-child(5) {
   justify-content: flex-start;
 }
 /* Add user image as background */
-main > div:nth-child(5) > div:first-child {
-  background-image: url('../image/flower/user_img.jpg');
-  background-color: #cccccc;
+#background_img_1,
+#background_img_2 {
+  background-image: url('../image/question/flower.jpg');
   width: 50vw;
   height: 35vh;
   min-height: 35vh;
@@ -135,6 +144,16 @@ main > div:nth-child(5) > div:first-child {
   background-repeat: no-repeat;
   background-size: cover;
 }
+/* To style the user img in question container differently */
+#background_img_1 {
+  margin: 0;
+  height: 35%;
+  min-height: 35%;
+  background-position: center;
+  background-size: contain;
+  border-bottom: 1px solid rgba(0, 80, 5, 0.5);
+}
+
 /* To style the outter container of result cards*/
 main > div:nth-child(5) > div:nth-child(2) {
   display: flex;
@@ -198,7 +217,6 @@ video {
   justify-content: center;
   align-items: center;
 }
-/*To make the video as large as possible*/
 
 /*For changing states (frames) of nav and footer*/
 main.ChooseInputFrame nav,
@@ -326,8 +344,8 @@ table th:nth-child(3) {
 }
 
 @media only screen and (max-width: 1000px) {
-  /* To style the img background container of the result*/
-  main > div:nth-child(5) > div:first-child {
+  /* To style the background img container*/
+  #background_img_2 {
     height: 25vh;
     width: 100vw;
   }
@@ -337,6 +355,7 @@ table th:nth-child(3) {
   }
   /* To style the question container */
   main > div:nth-child(4),
+  #background_img_1,
   video {
     width: 97vw;
   }

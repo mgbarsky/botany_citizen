@@ -5,11 +5,11 @@
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
     <meta charset="UTF-8" />
     <script src="js/sweetalert.min.js"></script>
-    <link href="css/index.css?v=18" rel="stylesheet" type="text/css" />
-    <script src="js/take_photo.js?v=13" defer></script>
-    <script src="js/load_data.js?v=14" defer></script>
-    <script src="js/decision_maker.js?=13" defer></script>
-    <script src="js/index.js?v=23" defer></script>
+    <link href="css/index.css?v=35" rel="stylesheet" type="text/css" />
+    <script src="js/take_photo.js?v=21" defer></script>
+    <script src="js/load_data.js?v=21" defer></script>
+    <script src="js/decision_maker.js?=22" defer></script>
+    <script src="js/index.js?v=32" defer></script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
   <body>
@@ -44,6 +44,8 @@
       </div>
 
       <div id="question_container">
+        <div id="background_img_1"></div>
+
         <p>
           <label id="q_pre" onclick="ask_question('pre')"><</label>
           <span id="question">
@@ -52,8 +54,9 @@
           <label id="q_next" onclick="ask_question('next')">></label>
         </p>
 
-        <img id="q_img" onError="display_img('q_img', '')" />
-
+        <div class="q_img_container">
+          <img id="q_img" onError="display_img('q_img', '')" />
+        </div>
         <table border="1">
           <tr>
             <th>Order</th>
@@ -71,7 +74,7 @@
       </div>
 
       <div id="result_container">
-        <div id="background_img"></div>
+        <div id="background_img_2"></div>
 
         <div id="info_box_container">
           <!-- <div class="info_box">
@@ -93,7 +96,7 @@
               <input id="file-input" type="file" accept=".tif,.jpg,.gif,.png,.raw,.jpeg" onchange="uploadPic()" />
             </div>
           </div>
-          <!-- <p>Copyright © 2019 V1 Ziyuan Li (Arthur) & Andrew Barsky </p> -->
+          <p>© 2019 V2 Ziyuan Li & Marina Barsky</p>
         </div>
 
         <div>

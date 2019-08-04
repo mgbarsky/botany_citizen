@@ -91,7 +91,7 @@ function process_raw_val(raw_attr_val, separator) {
     for (var val_index = 0; val_index < attr_val_arr.length; val_index++) {
       var val = parseFloat(attr_val_arr[val_index].trim());
 
-      if (!isNaN(val)) {
+      if (!isNaN(val) && !String(raw_attr_val).includes('^')) {
         attr_val_arr[val_index] = val;
       } else {
         attr_val_arr[val_index] = attr_val_arr[val_index].trim();
@@ -102,12 +102,13 @@ function process_raw_val(raw_attr_val, separator) {
   // When single val, put it into attr_val_arr
   else {
     var val = parseFloat(raw_attr_val);
-    if (!isNaN(val)) {
+    if (!isNaN(val) && !String(raw_attr_val).includes('^')) {
       attr_val_arr.push(val);
     } else {
       attr_val_arr.push(raw_attr_val.trim());
     }
   }
+
   return attr_val_arr;
 }
 
@@ -456,6 +457,7 @@ function divide_rows(rows, col_id, separator = '||', interval_symbol_list = ['^'
       result[attr_val].push(false_set);
     }
   }
+
   return result;
 }
 
@@ -559,6 +561,7 @@ function find_best_questions(class_id, total_score_func = total_entropy_of_split
         current_val = val_key;
       }
     }
+
     col_count++;
     // Add to the question object to be asked
     if (score != null) {
